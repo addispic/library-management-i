@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 // hooks
 import { useAppSelector, useAppDispatch } from "../hooks";
@@ -20,6 +21,10 @@ import {
   resetErrors,
   errorsSelector,
   setErrors,
+  login,
+  signup,
+  isAuthenticatingSelector,
+  userSelector,
 } from "../features/users/usersSlice";
 export default function Authentication() {
   // states
@@ -39,9 +44,19 @@ export default function Authentication() {
   // users
   const formId = useAppSelector(formIdSelector);
   const errors = useAppSelector(errorsSelector);
+  const isAuthenticating = useAppSelector(isAuthenticatingSelector);
+  const user = useAppSelector(userSelector);
 
   // hooks
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  // effects
+  useEffect(() => {
+    if (user !== null) {
+      navigate("/");
+    }
+  }, [user]);
 
   //   handlers
   // form id toggler
@@ -67,7 +82,7 @@ export default function Authentication() {
         !validatedFields.error.flatten().fieldErrors?.username &&
         !validatedFields.error.flatten().fieldErrors?.password
       ) {
-        console.log("You can Login", { username, password });
+        dispatch(login({ username, password }));
       }
       if (
         formId === "forget" &&
@@ -77,7 +92,7 @@ export default function Authentication() {
       }
     } else {
       if (formId === "signup") {
-        console.log("You can signup", { username, email, password });
+        dispatch(signup({username,email,password}))
       }
     }
   };
@@ -294,6 +309,7 @@ export default function Authentication() {
           {/* button and link */}
           <div className="flex items-center justify-between">
             <button
+              disabled={isAuthenticating}
               onClick={formSubmitHandler}
               className="px-3 py-1 text-sm bg-green-500 text-white cursor-pointer rounded-xs transition-colors ease-in-out duration-150 hover:bg-green-600"
             >

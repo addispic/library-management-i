@@ -27,11 +27,15 @@ export default function App() {
   }, []);
   if (checkingAuthentication) return <div>Authenticating...</div>;
   return (
-    <div className="w-screen h-screen overflow-hidden">
+    <div className="w-screen h-screen overflow-hidden bg-neutral-100">
       <Routes>
         <Route path="/authentication" element={<Authentication />}></Route>
         <Route path="/" element={<PrivateRoutes />}>
           <Route path="/" element={<Home />}></Route>
+          <Route path="/my-books" element={<Home />}></Route>
+          <Route path="/my-favorites" element={<Home />}></Route>
+          <Route path="/i-borrowed" element={<Home />}></Route>
+          <Route path="/members" element={<Home />}></Route>
         </Route>
       </Routes>
     </div>

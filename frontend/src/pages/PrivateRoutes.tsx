@@ -1,4 +1,3 @@
-
 import { Outlet, Navigate } from "react-router-dom";
 
 // hooks
@@ -7,6 +6,11 @@ import { useAppSelector } from "../hooks";
 // slices
 // users
 import { userSelector } from "../features/users/usersSlice";
+
+// components
+import LeftSideBar from "../components/LeftSideBar";
+import Header from "../components/Header";
+import RightSideBar from "../components/RightSideBar";
 
 export default function PrivateRoutes() {
   // states
@@ -18,16 +22,16 @@ export default function PrivateRoutes() {
       {user ? (
         <div className="w-screen h-screen flex">
           {/* left */}
-          <div className="w-80 bg-red-200 shrink-0">LeftSideBar</div>
+          <LeftSideBar />
           {/* content */}
-          <div className="flex-1 bg-blue-200">
+          <div className="flex-1 flex flex-col gap-y-1.5">
             {/* header */}
-            <header>Header</header>
+            <Header />
 
             <Outlet />
           </div>
           {/* right */}
-          <div className="w-96 bg-yellow-200">RightSideBar</div>
+          <RightSideBar />
         </div>
       ) : (
         <Navigate to={"/authentication"} />

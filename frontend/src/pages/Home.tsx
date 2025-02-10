@@ -36,81 +36,10 @@ export default function Home() {
         </div>
       </header>
       {/* books list */}
-      <div className="flex-1 pr-1.5 max-h-[84vh] overflow-y-auto">
-        <div className="grid grid-cols-3 gap-7">
-          {[...Array(130)].map((item, index) => {
-            return (
-              <div key={index}>
-                {/* the book */}
-                <div className="relative">
-                  {/* image */}
-                  <div className="w-full overflow-x-hidden rounded-t-xl h-[250px]">
-                    <img
-                      className="w-full h-full object-center object-cover"
-                      src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1590965645i/53713557.jpg"
-                      alt=""
-                    />
-                  </div>
-                  {/* book author & title */}
-                  <div className="absolute left-0 w-full bottom-0 bg-white/75 p-3 rounded-t-xl overflow-hidden">
-                    <div className="absolute right-1.5 top-1/2 -translate-y-1/2 w-[24px] font-medium aspect-square rounded-full bg-white shadow-md flex items-center justify-center text-xs">
-                      <span>3</span>
-                    </div>
-                    <h3>ፍቅር እስከ መቃብር</h3>
-                    <p className="text-sm">
-                      By <span className="font-medium">Haddis Alemayehu</span>
-                    </p>
-                  </div>
-                </div>
-                {/* footer */}
-                <footer className="w-full p-1.5 bg-white">
-                  {/* actions */}
-                  <div className="flex items-center justify-between gap-x-1.5 my-1.5">
-                    {/* like */}
-                    <button className="flex items-center gap-x-1 text-sm cursor-pointer text-neutral-500 transition-colors ease-in-out duration-150 hover:text-green-500">
-                      <span>12</span>
-                      <AiOutlineLike className="text-2xl" />
-                    </button>
-                    {/* comment */}
-                    <button className="flex items-center gap-x-1 text-sm cursor-pointer text-neutral-500 transition-colors ease-in-out duration-150 hover:text-green-500">
-                      <span>24</span>
-                      <FaRegMessage className="text-lg" />
-                    </button>
-
-                    {/* borrow */}
-                    <button className="flex items-center gap-x-1 text-sm cursor-pointer text-neutral-500 transition-colors ease-in-out duration-150 hover:text-green-500">
-                      <IoCartOutline className="text-2xl" />
-                      <span>borrow</span>
-                    </button>
-                    {/* favorite */}
-                    <button className="flex items-center gap-x-1 text-sm cursor-pointer text-neutral-500 transition-colors ease-in-out duration-150 hover:text-green-500">
-                      <MdFavoriteBorder className="text-2xl" />
-                    </button>
-                  </div>
-                  {/* author */}
-                  <div>
-                    <div className="flex items-center gap-x-1.5 text-sm text-neutral-500">
-                      <div className="w-[28px] aspect-square rounded-full overflow-hidden shrink">
-                        <img
-                          className="w-full h-full object-center object-cover"
-                          src="https://c.pxhere.com/photos/c7/42/young_man_portrait_beard_young_man_male_handsome_young_man_handsome-1046502.jpg!d"
-                          alt=""
-                        />
-                      </div>
-                      <div>
-                        <p>Addis Fenta</p>
-                        <p className="flex items-center gap-x-1.5 text-xs text-green-500">
-                          <CiClock2 />
-                          <span>3 minutes ago</span>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </footer>
-              </div>
-            );
-          })}
-        </div>
+      <div className="flex-1 pr-1.5 max-h-[82vh] overflow-y-auto">
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quasi voluptatum commodi quibusdam sunt, ipsum reiciendis molestias blanditiis laudantium dignissimos, natus dolor eum adipisci omnis beatae aliquid, rem temporibus maxime? Ad rerum pariatur eius corporis. Quas alias natus minima, nihil aliquam voluptates ipsam magnam tempore nisi corporis? Aliquam enim explicabo necessitatibus. Saepe similique placeat quos fugit distinctio quis, veritatis facilis molestiae dolorem illo tempora maxime sapiente. Labore modi in suscipit ducimus sit corporis consectetur voluptas officia. Illo ratione soluta nihil exercitationem esse? Sapiente ipsa amet reprehenderit perferendis sequi placeat quae, officiis libero atque obcaecati sint optio laborum, fugit blanditiis nostrum, dolores aspernatur rerum rem voluptas reiciendis ullam est at voluptatum! Cum vitae ea, temporibus quisquam fugiat, excepturi vel incidunt explicabo, mollitia velit architecto repudiandae rem dignissimos ut magnam. Neque et ab eius aliquam dolor ipsam quas nihil, iusto corrupti minus autem, optio illo expedita error tenetur odio harum nobis sit voluptate aut dolores accusamus. Blanditiis, inventore? Explicabo libero doloremque iusto, molestias eos corrupti omnis eveniet delectus quidem! Cumque illum ea esse atque placeat mollitia tenetur veniam inventore quasi nulla, cupiditate ullam, eum accusantium aliquid, excepturi voluptatem iste sed delectus facilis. Atque rem repellat ullam voluptatum ut accusantium, quasi aliquid officiis. Nihil accusantium praesentium et quia omnis est ullam numquam recusandae odio quam, deleniti repudiandae tempore dolorem id sequi pariatur officia unde rem, enim obcaecati. Fugiat labore hic deserunt dicta aperiam, dolorem dolor consequuntur quisquam est accusantium praesentium voluptate! Ipsum, voluptate incidunt libero rerum, ad dolorum porro suscipit eius fugit natus sit aspernatur quidem repudiandae dolorem earum ut cum similique, quos id unde repellendus quod molestiae. Nisi qui praesentium deleniti quia? Laudantium commodi non fugiat alias voluptates quam, sunt ab doloremque harum illo quos voluptatum rem totam dolorem neque incidunt fugit labore ex quasi quaerat consequuntur tempore aspernatur saepe recusandae. Magnam, incidunt. Quod quibusdam sed molestias dicta, dolorum similique quam fugiat, odio perferendis exercitationem sit veritatis architecto voluptatum dolore quae vero totam tenetur rem vel quia. Nostrum non atque quod dolorem molestias architecto corporis quos, est iusto incidunt fugiat saepe soluta recusandae, harum nihil? Impedit, quam odit esse adipisci soluta quod voluptatum et. Quaerat, maxime ex repellendus necessitatibus velit temporibus iure dignissimos incidunt provident nemo veniam. Consectetur atque tempore, nam quia deserunt voluptatibus eos velit modi repellat aliquam reiciendis earum? Maxime ipsa aliquid pariatur neque, velit consectetur sapiente inventore autem ab quae unde voluptas esse dignissimos impedit repellat libero recusandae consequuntur, dolores quia hic est quos dolorem harum nemo. Cupiditate quibusdam veniam laboriosam delectus sit, harum repellendus voluptatibus enim quasi fugiat officia saepe minima repellat nostrum aut praesentium culpa rerum quae doloribus officiis commodi sed hic fuga. Accusantium asperiores sint odit ut placeat repudiandae dolorem expedita voluptatem laudantium aliquam, repellendus eius beatae, ipsum fugit esse, possimus modi rem dolorum? Ullam quaerat deserunt impedit, saepe veritatis nobis veniam commodi dignissimos laboriosam doloribus molestias corrupti vel velit facere aliquam beatae fuga cum. Nobis perspiciatis dicta pariatur ullam blanditiis laborum veritatis tenetur, deserunt totam praesentium obcaecati quisquam, reprehenderit neque nulla! Adipisci quasi voluptatum non debitis quaerat animi consectetur, architecto odit, obcaecati nisi amet nihil rem quam. Unde voluptatem id adipisci? Nam asperiores, saepe praesentium placeat cum sunt vel vero, sit quis aperiam dignissimos! Totam amet ad quaerat tenetur? Voluptates quisquam dignissimos itaque iste fuga vel magnam at quia harum totam veniam sit perspiciatis et illum, aut, impedit assumenda. Fugiat deserunt ipsum dicta ullam saepe blanditiis, odit eligendi nihil nesciunt tempora inventore officiis nostrum voluptas reprehenderit repellendus vero enim laudantium quo tempore quas provident ea omnis debitis consequuntur? Iusto provident error, distinctio nam asperiores molestias nostrum aliquid quibusdam odio alias. Atque, possimus voluptatem. Totam assumenda enim facilis earum commodi corporis. Architecto quia fugiat inventore aut, ratione quae neque doloribus quis, libero qui porro nulla, unde ducimus reprehenderit magnam aspernatur eos? Expedita officiis dolores consequatur doloremque? Deserunt temporibus alias quae molestiae odit, aperiam, eos et quasi nulla excepturi qui optio sint a? Quae quaerat non, itaque ex ab incidunt enim ducimus sequi asperiores exercitationem inventore repudiandae cumque, magnam, praesentium aut vel architecto. Minima hic corrupti dolorum magnam autem placeat itaque est cupiditate ratione ab atque qui quia necessitatibus debitis laborum, dolore suscipit laboriosam incidunt omnis ipsa saepe explicabo nesciunt enim. Consequatur repellendus saepe vitae quasi nisi explicabo soluta ad quae reprehenderit, deserunt dolor similique, vel assumenda debitis eaque repudiandae illo veritatis natus iusto culpa voluptates aperiam iste necessitatibus doloribus. Iusto dolorum vero dicta assumenda nulla facere, rerum recusandae delectus tenetur unde, ea, molestiae est quia inventore? Corrupti deleniti neque odit, accusantium quibusdam ea molestias. Tempora, et recusandae ab repudiandae libero veritatis perferendis ipsam corporis dolorum non quos quis ducimus qui earum! Deleniti repellendus blanditiis, dignissimos perspiciatis quaerat magni aliquam aperiam quod dolor non vero adipisci enim? Quam voluptatibus minus voluptates sint ratione, eligendi a aperiam corporis explicabo reprehenderit maxime porro accusantium commodi fuga animi officiis? Porro quidem iusto fuga dicta asperiores nostrum quaerat placeat illum iste accusamus est doloribus, molestiae beatae quasi adipisci distinctio optio magni labore molestias minus corrupti itaque expedita libero fugiat. Inventore ad quaerat, eum officia nihil ducimus, possimus commodi cupiditate nam incidunt aut impedit? Eos ipsum repellat ratione velit laudantium asperiores voluptatibus cupiditate facilis magnam nisi expedita ad saepe doloremque totam assumenda, accusamus commodi amet tempora? Distinctio odio quisquam labore, excepturi porro earum ullam quos architecto magni molestias dignissimos placeat ut. Iste, excepturi! Tempore, veniam earum eaque asperiores ullam nihil quod dicta facere delectus ipsa, accusamus magnam nisi magni libero cupiditate consequatur ipsum, quisquam enim labore eos aliquam fugiat inventore! Maiores laborum suscipit recusandae, aperiam saepe consectetur amet officia explicabo, quisquam inventore ex voluptates molestias id illo aut dolorum ratione possimus tempora enim dolorem praesentium? Eos voluptates minus eligendi ad quae laudantium dolor. Possimus quidem, sint labore accusantium itaque nihil officiis a earum, ad dignissimos illum minima praesentium cumque culpa. Eligendi laborum beatae veritatis ab quae iste harum eius doloribus sed eos facere ipsa quidem pariatur, distinctio reprehenderit quo consequatur quaerat officia rerum, officiis aliquam repudiandae placeat esse. Placeat id repellendus maxime quis a? Repellendus nisi ipsam esse pariatur omnis, qui adipisci sunt.
+        </p>
       </div>
     </div>
   );

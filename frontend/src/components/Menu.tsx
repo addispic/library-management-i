@@ -70,10 +70,10 @@ export default function Menu() {
         return (
           <div
             key={item.text}
-            className={`flex items-center gap-x-3 mb-0.5 p-1 px-1.5 cursor-pointer  transition-colors ease-in-out duration-150  relative after:absolute after:left-0 after:top-0 after:h-full after:w-[3px]  ${
+            className={`flex items-center gap-x-3 p-1.5 px-1.5 cursor-pointer border-b  transition-colors ease-in-out duration-150  relative after:absolute after:left-0 after:top-0 after:h-full after:w-[3px]  ${
               menu.selected === item.text
-                ? "after:bg-green-500 bg-green-50 text-green-500 hover:text-green-600"
-                : "after:bg-transparent bg-transparent text-neutral-500 hover:text-neutral-700"
+                ? "after:bg-green-500 bg-green-50 text-green-500 hover:text-green-600 border-green-500"
+                : "after:bg-transparent bg-transparent text-neutral-500 hover:text-neutral-700 border-neutral-200 hover:border-neutral-400"
             }`}
             onClick={() => {
               navigationHandler(item.text, item.path);
@@ -81,10 +81,10 @@ export default function Menu() {
           >
             {/* icon */}
             <div>
-              <item.icon className="text-xl " />
+              <item.icon className="text-lg " />
             </div>
             {/* text */}
-            <div>
+            <div className="text-sm">
               <span>{item.text}</span>
             </div>
           </div>

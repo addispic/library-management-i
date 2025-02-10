@@ -1,92 +1,102 @@
-import { useState, useEffect } from "react";
-
+import { useState } from "react";
+// icons
+import { MdKeyboardArrowDown } from "react-icons/md";
 export default function AddNewBook() {
   // states
-  // local states
+  // local
+  const [file, setFile] = useState<File | null>(null);
   const [focus, setFocus] = useState("");
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
-  const [number, setNumber] = useState("");
-  const [image, setImage] = useState<File | null>(null);
-  const [preview, setPreview] = useState<string | null>(null);
-  const [titleError, setTitleError] = useState("");
-  const [authorError, setAuthorError] = useState("");
-  const [numberError, setNumberError] = useState("");
-  const [imageError, setImageError] = useState("");
+  const [total, setTotal] = useState("");
+  const [isbn, setIsbn] = useState("");
+  const [date, setDate] = useState("");
+  const [category, setCategory] = useState({
+    options: [
+      {
+        text: "Educational",
+      },
+      {
+        text: "Fiction",
+      },
+    ],
+    selected: "",
+    isOn: false,
+  });
+  const [description, setDescription] = useState("");
 
-  //   handlers
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setImage(file);
+  // handlers
+  // file input handler
+  const fileInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files?.[0]) {
+      setFile(event.target.files[0]);
     }
   };
 
-  useEffect(() => {
-    if (!image) return;
-
-    const objectUrl = URL.createObjectURL(image);
-    setPreview(objectUrl);
-
-    // Clean up the URL when the component unmounts or the image changes
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [image]);
-
-  //   cancel
+  // cancel handler
   const cancelHandler = () => {
+    setFile(null);
     setFocus("");
     setTitle("");
     setAuthor("");
-    setNumber("");
-    setImage(null);
-    setPreview(null);
-    setTitleError("");
-    setAuthorError("");
-    setNumberError("");
-    setImageError("");
+    setTotal("");
+    setIsbn("");
+    setDate("");
+    setCategory((prev) => {
+      return {
+        ...prev,
+        selected: "",
+        isOn: false,
+      };
+    });
+    setDescription("");
   };
-
-  // submit handler
-  const addNewBookSubmitHandler = () => {
-    if (!title.trim()) {
-      setTitleError("Book title required");
-    } else {
-      setTitleError("");
-    }
-    if (!author.trim()) {
-      setAuthorError("Book author required");
-    } else {
-      setAuthorError("");
-    }
-    if (!number.trim()) {
-      setNumberError("Total available books required");
-    } else {
-      setNumberError("");
-    }
-    if (!image) {
-      setImageError("Please select book cover image");
-    } else {
-      setImageError("");
-    }
-
-    if (!titleError && !authorError && !numberError && !imageError) {
-      console.log({ title, author, number, image });
-    }
-  };
-
   return (
     <div className="p-3">
-      <h3 className="w-full text-lg font-medium border-b border-neutral-200 text-neutral-600">
-        Publish New Book
-      </h3>
+      {/* header */}
+      <header className="py-0.5 border-b border-neutral-200 text-neutral-400">
+        <h3 className="font-medium">Publish New Book</h3>
+      </header>
       {/* form */}
       <div className="mt-5">
-        {/* book title */}
-        <div className="mb-3">
+        {/* cover image */}
+        <div>
+          {/* preview */}
+          <input
+            type="file"
+            id="book-cover-image"
+            accept="images/*"
+            hidden
+            onChange={fileInputHandler}
+          />
+          <label
+            htmlFor="book-cover-image"
+            className={`flex items-center p-1 border  rounded-sm hover:border-green-500 gap-x-3 cursor-pointer text-sm  transition-colors ease-in-out duration-300 hover:text-green-500 ${
+              file
+                ? "border-green-500 text-green-500"
+                : "border-neutral-200 text-neutral-400"
+            }`}
+          >
+            <div className="w-[32px] aspect-square rounded-md overflow-hidden">
+              <img
+                className="w-full h-full object-center object-cover"
+                src={
+                  file
+                    ? URL.createObjectURL(file)
+                    : "https://www.freeiconspng.com/uploads/vector-for-free-use-red-book-icon-29.png"
+                }
+                alt=""
+              />
+            </div>
+            <span>Select Book Cover Image</span>
+          </label>
+        </div>
+        {/* book title & Author */}
+        <div className="mt-5 flex items-center gap-x-3">
+          {/* title */}
           <div
-            className={`w-full flex items-center text-sm border rounded-sm p-1.5 transition-colors ease-in-out duration-150 ${
-              titleError
+            className={`w-[50%] p-1.5 border rounded-md transition-colors ease-in-out duration-300 ${
+              !true
                 ? "border-red-500"
                 : focus === "title" || title
                 ? "border-green-500"
@@ -94,13 +104,12 @@ export default function AddNewBook() {
             }`}
           >
             <input
-              className="flex-1 focus:outline-none focus:ring-0 border-none"
+              className="w-full focus:ring-0 focus:outline-none text-sm text-neutral-700"
               type="text"
               placeholder="Book title"
               value={title}
               onChange={(e) => {
                 setTitle(e.target.value);
-                setTitleError("");
               }}
               onFocus={() => {
                 setFocus("title");
@@ -110,13 +119,10 @@ export default function AddNewBook() {
               }}
             />
           </div>
-          <div className="text-sm text-red-500">{titleError}</div>
-        </div>
-        {/* book author */}
-        <div className="mb-3">
+          {/* author */}
           <div
-            className={`w-full flex items-center text-sm border rounded-sm p-1.5 transition-colors ease-in-out duration-150 ${
-              authorError
+            className={`w-[50%] p-1.5 border rounded-md transition-colors ease-in-out duration-300 ${
+              !true
                 ? "border-red-500"
                 : focus === "author" || author
                 ? "border-green-500"
@@ -124,13 +130,12 @@ export default function AddNewBook() {
             }`}
           >
             <input
-              className="flex-1 focus:outline-none focus:ring-0 border-none"
+              className="w-full focus:ring-0 focus:outline-none text-sm text-neutral-700"
               type="text"
               placeholder="Book author"
               value={author}
               onChange={(e) => {
                 setAuthor(e.target.value);
-                setAuthorError("");
               }}
               onFocus={() => {
                 setFocus("author");
@@ -140,80 +145,182 @@ export default function AddNewBook() {
               }}
             />
           </div>
-          <div className="text-sm text-red-500">{authorError}</div>
         </div>
-        {/* book number */}
-        <div className="mb-3">
+        {/* book ISBN  & total */}
+        <div className="mt-5 flex items-center gap-x-3">
+          {/* ISB */}
           <div
-            className={`w-full flex items-center text-sm border rounded-sm p-1.5 transition-colors ease-in-out duration-150 ${
-              numberError
+            className={`w-[50%] p-1.5 border rounded-md transition-colors ease-in-out duration-300 ${
+              !true
                 ? "border-red-500"
-                : focus === "number" || number
+                : focus === "isbn" || isbn
                 ? "border-green-500"
                 : "border-neutral-300"
             }`}
           >
             <input
-              className="flex-1 focus:outline-none focus:ring-0 border-none"
-              type="number"
-              placeholder="Total available books"
-              value={number}
+              className="w-full focus:ring-0 focus:outline-none text-sm text-neutral-700"
+              type="text"
+              placeholder="Book ISBN"
+              value={isbn}
               onChange={(e) => {
-                setNumber(e.target.value);
-                setNumberError("");
+                setIsbn(e.target.value);
               }}
               onFocus={() => {
-                setFocus("number");
+                setFocus("isbn");
               }}
               onBlur={() => {
                 setFocus("");
               }}
             />
           </div>
-          <div className="text-sm text-red-500">{numberError}</div>
-        </div>
-        {/* book cover */}
-        <input
-          type="file"
-          id="book-cover-image-picker"
-          accept="images/*"
-          hidden
-          onChange={handleFileChange}
-        />
-        <label htmlFor="book-cover-image-picker" className="cursor-pointer">
-          <div className="w-full h-[150px] overflow-hidden rounded-md border-2 border-neutral-300 relative">
-            <h3
-              className={`absolute top-1 right-1 px-1 py-1 text-sm bg-white  shadow-2xl rounded-md overflow-hidden ${
-                imageError
-                  ? "text-red-500"
-                  : image
-                  ? "text-green-600"
-                  : "text-neutral-400"
-              }`}
-            >
-              {imageError ? imageError : "Select book cover image"}
-            </h3>
-            <img
-              className="w-full h-full object-center object-cover"
-              src={
-                preview
-                  ? preview
-                  : "https://static.vecteezy.com/system/resources/previews/007/165/331/original/book-icon-book-icon-simple-sign-book-icon-isolated-on-with-background-illustration-of-book-icon-free-free-vector.jpg"
-              }
-              alt=""
+          {/* total */}
+          <div
+            className={`w-[50%] p-1.5 border rounded-md transition-colors ease-in-out duration-300 ${
+              !true
+                ? "border-red-500"
+                : focus === "total" || total
+                ? "border-green-500"
+                : "border-neutral-300"
+            }`}
+          >
+            <input
+              className="w-full focus:ring-0 focus:outline-none text-sm text-neutral-700"
+              type="number"
+              placeholder="Available books"
+              value={total}
+              onChange={(e) => {
+                setTotal(e.target.value);
+              }}
+              onFocus={() => {
+                setFocus("total");
+              }}
+              onBlur={() => {
+                setFocus("");
+              }}
             />
           </div>
-        </label>
-        {/* buttons */}
-        <div className="mt-7 flex items-center gap-x-3">
-          <button
-            className="px-3 py-1 bg-green-500 text-white rounded-sm cursor-pointer transition-colors ease-in-out duration-150 hover:bg-green-600"
-            onClick={addNewBookSubmitHandler}
+        </div>
+        {/* date & category */}
+        <div className="mt-5 flex items-center gap-x-3">
+          {/* date */}
+          <div
+            className={`w-[50%] p-1.5 border rounded-md transition-colors ease-in-out duration-300 relative overflow-hidden ${
+              !true
+                ? "border-red-500"
+                : focus === "date" || date
+                ? "border-green-500"
+                : "border-neutral-300"
+            }`}
           >
+            <input
+              className="w-full focus:ring-0 focus:outline-none text-sm text-neutral-700"
+              type="date"
+              placeholder="Publish date"
+              value={date}
+              onChange={(e) => {
+                setDate(e.target.value);
+              }}
+              onFocus={() => {
+                setFocus("date");
+              }}
+              onBlur={() => {
+                setFocus("");
+              }}
+            />
+            {!date && <div className="absolute left-0 top-0 h-full w-[75%] bg-white text-sm text-neutral-400 flex items-center px-1.5"><span>Publish date</span></div>}
+          </div>
+          {/* category */}
+          <div
+            className={`w-[50%] p-1.5 border rounded-md transition-colors ease-in-out duration-300 relative text-sm ${
+              !true
+                ? "border-red-500"
+                : focus === "category" || category.selected
+                ? "border-green-500"
+                : "border-neutral-300"
+            }`}
+          >
+            {/* text */}
+            <div
+              className="flex items-center justify-between cursor-pointer text-neutral-500"
+              onClick={() => {
+                setCategory((prev) => {
+                  return {
+                    ...prev,
+                    isOn: !prev.isOn,
+                  };
+                });
+              }}
+            >
+              <span>{category.selected || "Select category"}</span>
+              <MdKeyboardArrowDown
+                className={`text-2xl transition-transform ease-in-out duration-150 ${
+                  category.isOn ? "-rotate-180" : "rotate-0"
+                }`}
+              />
+            </div>
+            {/* options */}
+            <div
+              className={`absolute left-0 top-[105%] w-full bg-white border border-neutral-300 rounded-sm transition-transform ease-in-out duration-150 ${
+                category.isOn ? "scale-100" : "scale-0"
+              }`}
+            >
+              {category.options.map((item) => {
+                return (
+                  <div
+                    key={item.text}
+                    className="p-1.5 border-b border-neutral-300 last:border-transparent cursor-pointer hover:bg-neutral-100"
+                    onClick={() => {
+                      setCategory((prev) => {
+                        return {
+                          ...prev,
+                          selected: item.text,
+                          isOn: false,
+                        };
+                      });
+                    }}
+                  >
+                    {item.text}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+        {/* book description */}
+        <div className="mt-5">
+          <div
+            className={`p-1.5 border rounded-md transition-colors ease-in-out duration-300 ${
+              !true
+                ? "border-red-500"
+                : focus === "description" || description
+                ? "border-green-500"
+                : "border-neutral-300"
+            }`}
+          >
+            <textarea
+              className="w-full h-[80px] focus:ring-0 focus:outline-none text-sm resize-none"
+              placeholder="Book description"
+              value={description}
+              onChange={(e) => {
+                setDescription(e.target.value);
+              }}
+              onFocus={() => {
+                setFocus("description");
+              }}
+              onBlur={() => {
+                setFocus("");
+              }}
+            ></textarea>
+          </div>
+        </div>
+        {/* buttons */}
+        <div className="mt-3 flex items-center justify-between">
+          <button className="text-sm px-5 py-1.5 bg-green-600 rounded-sm overflow-hidden text-white transition-colors ease-in-out duration-150 hover:bg-green-500 cursor-pointer">
             Publish
           </button>
           <button
-            className="px-3 py-1 bg-neutral-500 text-white rounded-sm cursor-pointer transition-colors ease-in-out duration-150 hover:bg-neutral-600"
+            className="text-sm px-5 py-1.5 bg-neutral-600 rounded-sm overflow-hidden text-white transition-colors ease-in-out duration-150 hover:bg-neutral-500 cursor-pointer"
             onClick={cancelHandler}
           >
             Cancel

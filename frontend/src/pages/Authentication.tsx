@@ -92,7 +92,7 @@ export default function Authentication() {
       }
     } else {
       if (formId === "signup") {
-        dispatch(signup({username,email,password}))
+        dispatch(signup({ username, email, password }));
       }
     }
   };
@@ -143,6 +143,7 @@ export default function Authentication() {
                 {/* input */}
                 <div className="flex-1">
                   <input
+                    spellCheck={false}
                     className="w-full focus:ring-0 focus:outline-none border-none bg-transparent text-sm"
                     type="text"
                     placeholder="Username"
@@ -201,6 +202,7 @@ export default function Authentication() {
                 {/* input */}
                 <div className="flex-1">
                   <input
+                    spellCheck={false}
                     className="w-full focus:ring-0 focus:outline-none border-none bg-transparent text-sm"
                     type="text"
                     placeholder="Email"
@@ -259,6 +261,7 @@ export default function Authentication() {
                 {/* input */}
                 <div className="flex-1">
                   <input
+                    spellCheck={false}
                     className="w-full focus:ring-0 focus:outline-none border-none bg-transparent text-sm"
                     type={isPasswordHide ? "password" : "text"}
                     placeholder="Password"

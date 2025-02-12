@@ -3,9 +3,10 @@ import { TbSettingsCog } from "react-icons/tb";
 import { IoExitOutline } from "react-icons/io5";
 import { GiBookmark } from "react-icons/gi";
 // hooks
-import { useAppSelector } from "../hooks";
+import { useAppSelector, useAppDispatch } from "../hooks";
 // slices
 import { menuIdSelector } from "../features/menu/menuSlice";
+import { logout } from "../features/users/usersSlice";
 // components
 import Menu from "./Menu";
 import Members from "./Members";
@@ -14,6 +15,8 @@ export default function LeftSideBar() {
   // slices state
   // menu
   const menuId = useAppSelector(menuIdSelector);
+  // hooks
+  const dispatch = useAppDispatch();
   return (
     <div className="w-80 shrink-0 h-full">
       <div className="px-5 py-1.5 h-full w-full">
@@ -40,7 +43,12 @@ export default function LeftSideBar() {
               <TbSettingsCog className="text-xl relative z-10" />
               <span className="relative z-10">Settings</span>
             </div>
-            <div className="flex items-center gap-x-3 text-neutral-500 cursor-pointer relative after:absolute after:left-0 after:top-0 after:h-full after:w-[32px] after:rounded-md after:bg-neutral-100 p-1.5 rounded-md overflow-hidden after:transition-all after:ease-in-out after:duration-200 hover:after:w-full">
+            <div
+              className="flex items-center gap-x-3 text-neutral-500 cursor-pointer relative after:absolute after:left-0 after:top-0 after:h-full after:w-[32px] after:rounded-md after:bg-neutral-100 p-1.5 rounded-md overflow-hidden after:transition-all after:ease-in-out after:duration-200 hover:after:w-full"
+              onClick={() => {
+                dispatch(logout());
+              }}
+            >
               {/* icon */}
               <IoExitOutline className="text-[1.3rem] relative z-10" />
               <span className="relative z-10">Logout</span>

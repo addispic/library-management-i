@@ -1,15 +1,18 @@
 import { configureStore } from "@reduxjs/toolkit";
 
 // reducers
-import users from "./features/users/usersSlice";
-// menu
 import menu from "./features/menu/menuSlice";
+import users from "./features/users/usersSlice";
+import profiles from "./features/profiles/profilesSlice";
+import books from "./features/books/booksSlice";
 
 // store
 export const store = configureStore({
   reducer: {
     users,
     menu,
+    profiles,
+    books,
   },
 });
 

@@ -16,6 +16,14 @@ const usersSchema = new Schema(
       validate: [isEmail, "Invalid email address"],
       unique: true,
     },
+    role: {
+      type: String,
+      default: "normal"
+    },
+    status: {
+      type: String,
+      default: "active",
+    },
     password: {
       type: String,
       required: [true, "Password required"],

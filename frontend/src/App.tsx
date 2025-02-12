@@ -1,6 +1,9 @@
 import { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 
+// config
+import { SOCKET } from "./config";
+
 // hooks
 import { useAppDispatch, useAppSelector } from "./hooks";
 // slices
@@ -8,7 +11,15 @@ import { useAppDispatch, useAppSelector } from "./hooks";
 import {
   checkingAuthenticationSelector,
   isUserAuthenticated,
+  userSelector,
+  getUsers,
+  setOnlineUsers,
+  newUserSignupEvent
 } from "./features/users/usersSlice";
+// profiles
+import { getProfiles, newProfileEvent,profileUpdateEvent } from "./features/profiles/profilesSlice";
+// books
+import { getBooks , newBookEvent, updateBookEvent,deleteBookEvent} from "./features/books/booksSlice";
 // pages
 import PrivateRoutes from "./pages/PrivateRoutes";
 import Authentication from "./pages/Authentication";
@@ -18,6 +29,7 @@ export default function App() {
   // slices
   // users
   const checkingAuthentication = useAppSelector(checkingAuthenticationSelector);
+  const user = useAppSelector(userSelector);
   // hooks
   const dispatch = useAppDispatch();
 
@@ -25,6 +37,39 @@ export default function App() {
   useEffect(() => {
     dispatch(isUserAuthenticated());
   }, []);
+  useEffect(() => {
+    if (user) {
+      dispatch(getUsers());
+      dispatch(getProfiles());
+      dispatch(getBooks());
+
+      // socket
+      // books
+      SOCKET.on("newBookEvent",newBook => {
+        dispatch(newBookEvent(newBook))
+      })
+      SOCKET.on("updateBookEvent",updatedBook => {
+        dispatch(updateBookEvent(updatedBook))
+      })
+      SOCKET.on("deleteBookEvent",_id => {
+        dispatch(deleteBookEvent(_id))
+      })
+      // users
+      SOCKET.on("getOnlineUsersEvent", (data) => {
+        dispatch(setOnlineUsers(data))
+      });
+      SOCKET.on("newUserSignupEvent",user => {
+        dispatch(newUserSignupEvent(user))
+      })
+      // profiles
+      SOCKET.on("newProfileEvent",newProfile => {
+        dispatch(newProfileEvent(newProfile))
+      })
+      SOCKET.on("profileUpdateEvent",updatedProfile => {
+        dispatch(profileUpdateEvent(updatedProfile))
+      })
+    }
+  }, [user]);
   if (checkingAuthentication) return <div>Authenticating...</div>;
   return (
     <div className="w-screen h-screen overflow-hidden bg-neutral-100">

@@ -4,6 +4,12 @@ import jwt from "jsonwebtoken";
 // utils
 import { MAX_AGE, generateToken } from "../utils/users.utils";
 
+declare module "express" {
+  export interface Request {
+    _id?: string;
+  }
+}
+
 // secret
 const secret = process.env.SECRET as string;
 
@@ -21,6 +27,7 @@ const privateRoutes =
         res.status(401).json({ error: "unauthorized" });
         return;
       }
+      req._id = decodedToken?._id
       res.cookie("lm-auth-session", generateToken(decodedToken?._id), {
         httpOnly: true,
         secure: true,

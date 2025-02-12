@@ -9,9 +9,17 @@ import { server, app } from "./config/socket.connection";
 // db
 import { dbConnectionHandler } from "./config/db.connection";
 
+// middlewares
+// users
+import { privateRoutes } from "./middlewares/users.middleware";
+
 // routes
 // users
 import usersRoutes from "./routes/users.routes";
+// profiles
+import profilesRoutes from "./routes/profiles.routes";
+// books
+import booksRoutes from "./routes/books.routes";
 
 // port
 const PORT = process.env.PORT || 5000;
@@ -31,6 +39,10 @@ app.use(
 // routes
 // users
 app.use("/api/users", usersRoutes);
+// profiles
+app.use("/api/profiles", privateRoutes(), profilesRoutes);
+// books
+app.use("/api/books", privateRoutes(), booksRoutes);
 
 // listening
 server.listen(PORT, async () => {

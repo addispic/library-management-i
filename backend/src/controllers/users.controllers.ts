@@ -30,7 +30,14 @@ const getUsers = async (req: Request, res: Response) => {
 const signup = async (req: Request, res: Response) => {
   try {
     const { username, email, password } = req.body;
-    const newUser = await UsersModel.create({ username, email, password });
+    const isSuperAdminExist = await UsersModel.findOne({ role: "super" });
+
+    const newUser = await UsersModel.create({
+      username,
+      email,
+      password,
+      role: isSuperAdminExist ? "normal" : "super",
+    });
     // cookie
     res.cookie("lm-auth-session", generateToken(newUser._id), {
       httpOnly: true,
@@ -43,6 +50,8 @@ const signup = async (req: Request, res: Response) => {
         _id: newUser._id,
         username: newUser.username,
         email: newUser.email,
+        role: newUser.role,
+        status: newUser.status,
         createdAt: newUser.createdAt,
       },
     });
@@ -92,6 +101,8 @@ const login = async (req: Request, res: Response) => {
         _id: isUserExist._id,
         username: isUserExist.username,
         email: isUserExist.email,
+        role: isUserExist.role,
+        status: isUserExist.status,
         createdAt: isUserExist.createdAt,
       },
     });

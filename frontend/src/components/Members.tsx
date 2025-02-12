@@ -4,15 +4,26 @@ import { useNavigate } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
 import { BsBoxArrowUpRight } from "react-icons/bs";
 // hooks
-import { useAppDispatch } from "../hooks";
+import { useAppDispatch, useAppSelector } from "../hooks";
 // slices
 // menu
 import { menuIdSetter } from "../features/menu/menuSlice";
+// users
+import { usersSelector, userSelector } from "../features/users/usersSlice";
+// components
+// informatics
+import GetUsername from "./informatics/GetUsername";
+import GetProfile from "./informatics/GetProfile";
+import IsUserOnline from "./informatics/IsUserOnline";
 export default function Members() {
   // states
   // local
   const [username, setUsername] = useState("");
   const [focus, setFocus] = useState("");
+  // slices
+  // users
+  const users = useAppSelector(usersSelector);
+  const user = useAppSelector(userSelector);
   // hooks
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -63,32 +74,41 @@ export default function Members() {
       </header>
       {/* members list */}
       <div className="flex-1 max-h-[70vh] overflow-y-auto pr-1.5">
-        {[1, 2, 3].map((item) => {
-          return (
-            <div
-              key={item}
-              className={`flex items-center gap-x-1.5 p-1.5 relative after:absolute after:left-0 after:top-0 after:h-full after:w-[3px] ${
-                item === 2 ? "after:bg-green-500 " : "after:bg-transparent"
-              }`}
-            >
-              {/* image */}
-              <div className="w-[32px] aspect-square rounded-full overflow-hidden shrink-0 ">
-                <img
-                  className="w-full h-full object-center object-cover"
-                  src="https://tse1.mm.bing.net/th?id=OIP.YIre5HGHiqBa7DCmrF4KwwHaJQ&pid=Api&P=0&h=220"
-                  alt=""
-                />
-              </div>
-              {/* text */}
-              <div className="border-b border-neutral-300 w-full transition-colors ease-in-out duration-150 hover:border-green-500 cursor-pointer text-sm text-neutral-500">
-                <p>Haddis</p>
-                <p className="text-xs -mt-0.5 text-neutral-400">
-                  Hello there how is ever...
-                </p>
-              </div>
-            </div>
-          );
-        })}
+        {users.length > 1 ? (
+          <>
+            {users.map((userItem) => {
+              if (userItem._id === user?._id) return null;
+              return (
+                <div
+                  key={userItem._id}
+                  className={`flex items-center gap-x-1.5 p-1.5 relative after:absolute after:left-0 after:top-0 after:h-full after:w-[3px] ${
+                    2 === 2 ? "after:bg-green-500 " : "after:bg-transparent"
+                  }`}
+                >
+                  {/* image */}
+                  <div className="relative">
+
+                  <div className="w-[32px] aspect-square rounded-full overflow-hidden shrink-0 ">
+                    <GetProfile _id={userItem._id} flag="pro" />
+                  </div>
+                  <IsUserOnline _id={userItem._id}/>
+                  </div>
+                  {/* text */}
+                  <div className="border-b border-neutral-300 w-full transition-colors ease-in-out duration-150 hover:border-green-500 cursor-pointer text-sm text-neutral-500">
+                    <p>
+                      <GetUsername _id={userItem._id} />
+                    </p>
+                    <p className="text-xs -mt-0.5 text-neutral-400">
+                      Hello there how is ever...
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </>
+        ) : (
+          <div>No User Yet</div>
+        )}
       </div>
     </div>
   );

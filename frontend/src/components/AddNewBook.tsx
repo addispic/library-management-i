@@ -1,10 +1,28 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 // icons
 import { MdKeyboardArrowDown } from "react-icons/md";
+// hooks
+import { useAppSelector, useAppDispatch } from "../hooks";
+// slices
+// books
+import {
+  addNewBook,
+  isBookUploadingSelector,
+  isBookUploadingDoneSelector,
+  resetIsBookUploadingDone,
+  isBookEditOnSelector,
+  setIsBookEditOn,
+  updateBook,
+} from "../features/books/booksSlice";
 export default function AddNewBook() {
   // states
+  // slices
+  // books
+  const isBookUploading = useAppSelector(isBookUploadingSelector);
+  const isBookUploadingDone = useAppSelector(isBookUploadingDoneSelector);
+  const isBookEditOn = useAppSelector(isBookEditOnSelector);
   // local
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<any>(null);
   const [focus, setFocus] = useState("");
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
@@ -24,6 +42,48 @@ export default function AddNewBook() {
     isOn: false,
   });
   const [description, setDescription] = useState("");
+
+  // hooks
+  const dispatch = useAppDispatch();
+
+  // effect
+  useEffect(() => {
+    if (isBookUploadingDone) {
+      setFile(null);
+      setFocus("");
+      setTitle("");
+      setAuthor("");
+      setTotal("");
+      setIsbn("");
+      setDate("");
+      setCategory((prev) => {
+        return {
+          ...prev,
+          selected: "",
+          isOn: false,
+        };
+      });
+      setDescription("");
+      dispatch(setIsBookEditOn(null))
+    }
+  }, [isBookUploadingDone]);
+
+  useEffect(() => {
+    if (isBookEditOn) {
+      setTitle(isBookEditOn.title);
+      setAuthor(isBookEditOn.author);
+      setTotal(isBookEditOn.total.toString());
+      setIsbn(isBookEditOn.isbn);
+      setDate(isBookEditOn.date);
+      setCategory((prev) => {
+        return {
+          ...prev,
+          selected: isBookEditOn.category,
+        };
+      });
+      setDescription(isBookEditOn.description);
+    }
+  }, [isBookEditOn]);
 
   // handlers
   // file input handler
@@ -50,12 +110,51 @@ export default function AddNewBook() {
       };
     });
     setDescription("");
+    dispatch(setIsBookEditOn(null));
+  };
+
+  // submit handler
+  const addNewBookHandler = () => {
+    dispatch(resetIsBookUploadingDone());
+    if (
+      title &&
+      author &&
+      total &&
+      isbn &&
+      date &&
+      category.selected &&
+      description
+    ) {
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("author", author);
+      formData.append("total", total);
+      formData.append("isbn", isbn);
+      formData.append("date", date);
+      formData.append("book", file);
+      formData.append("description", description);
+      formData.append("category", category.selected);
+      if (isBookEditOn) {
+        formData.append("_id", isBookEditOn._id);
+        dispatch(updateBook(formData));
+      } else {
+        if (!file) {
+          console.log("All Fields Are Required");
+        } else {
+          dispatch(addNewBook(formData));
+        }
+      }
+    } else {
+      console.log("Fill All Fields Are Required");
+    }
   };
   return (
     <div className="p-3">
       {/* header */}
       <header className="py-0.5 border-b border-neutral-200 text-neutral-400">
-        <h3 className="font-medium">Publish New Book</h3>
+        <h3 className="font-medium">
+          {isBookEditOn ? "Update Book Detail" : "Publish New Book"}
+        </h3>
       </header>
       {/* form */}
       <div className="mt-5">
@@ -72,7 +171,7 @@ export default function AddNewBook() {
           <label
             htmlFor="book-cover-image"
             className={`flex items-center p-1 border  rounded-sm hover:border-green-500 gap-x-3 cursor-pointer text-sm  transition-colors ease-in-out duration-300 hover:text-green-500 ${
-              file
+              file || isBookEditOn?.file
                 ? "border-green-500 text-green-500"
                 : "border-neutral-200 text-neutral-400"
             }`}
@@ -83,6 +182,8 @@ export default function AddNewBook() {
                 src={
                   file
                     ? URL.createObjectURL(file)
+                    : isBookEditOn
+                    ? isBookEditOn.file
                     : "https://www.freeiconspng.com/uploads/vector-for-free-use-red-book-icon-29.png"
                 }
                 alt=""
@@ -228,7 +329,11 @@ export default function AddNewBook() {
                 setFocus("");
               }}
             />
-            {!date && <div className="absolute left-0 top-0 h-full w-[75%] bg-white text-sm text-neutral-400 flex items-center px-1.5"><span>Publish date</span></div>}
+            {!date && (
+              <div className="absolute left-0 top-0 h-full w-[75%] bg-white text-sm text-neutral-400 flex items-center px-1.5">
+                <span>Publish date</span>
+              </div>
+            )}
           </div>
           {/* category */}
           <div
@@ -316,8 +421,16 @@ export default function AddNewBook() {
         </div>
         {/* buttons */}
         <div className="mt-3 flex items-center justify-between">
-          <button className="text-sm px-5 py-1.5 bg-green-600 rounded-sm overflow-hidden text-white transition-colors ease-in-out duration-150 hover:bg-green-500 cursor-pointer">
-            Publish
+          <button
+            disabled={isBookUploading}
+            className="text-sm px-5 py-1.5 bg-green-600 rounded-sm overflow-hidden text-white transition-colors ease-in-out duration-150 hover:bg-green-500 cursor-pointer"
+            onClick={addNewBookHandler}
+          >
+            {isBookUploading ? (
+              <div className="w-[20px] aspect-square rounded-full shrink-0 border-2 border-neutral-200 border-r-transparent animate-spin" />
+            ) : (
+              <span>{isBookEditOn ? "Save Changes" : "Publish"}</span>
+            )}
           </button>
           <button
             className="text-sm px-5 py-1.5 bg-neutral-600 rounded-sm overflow-hidden text-white transition-colors ease-in-out duration-150 hover:bg-neutral-500 cursor-pointer"

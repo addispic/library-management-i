@@ -1,6 +1,9 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios, { isAxiosError } from "axios";
 
+// config
+import { SOCKET } from "../../config";
+
 // store
 import { RootState } from "../../store";
 
@@ -10,7 +13,14 @@ export type IUser = {
   _id: string;
   username: string;
   email: string;
+  role: string;
+  status: string;
   createdAt: string;
+};
+// online user
+export type IOnlineUser = {
+  _id: string;
+  id: string;
 };
 // errors
 export type IErrors = {
@@ -24,8 +34,11 @@ type IInitialState = {
   errors: IErrors;
   formId: "login" | "signup" | "forget";
   user: IUser | null;
+  users: IUser[];
   isAuthenticating: boolean;
   checkingAuthentication: boolean;
+  isUsersFetching: boolean;
+  onlineUsers: IOnlineUser[];
 };
 
 // login
@@ -78,13 +91,42 @@ export const isUserAuthenticated = createAsyncThunk(
     }
   }
 );
+// get users
+export const getUsers = createAsyncThunk("users/getUsers", async () => {
+  try {
+    const response = await axios.get("/api/users");
+    return response.data;
+  } catch (err) {
+    if (isAxiosError(err)) {
+      return err.response?.data;
+    } else {
+      return { errors: { flag: "unexpected error has occurred, login" } };
+    }
+  }
+});
+// logout
+export const logout = createAsyncThunk("users/logout", async () => {
+  try {
+    const response = await axios.get("/api/users/logout");
+    return response.data;
+  } catch (err) {
+    if (isAxiosError(err)) {
+      return err.response?.data;
+    } else {
+      return { errors: { flag: "unexpected error has occurred, login" } };
+    }
+  }
+});
 // initial state
 const initialState: IInitialState = {
   errors: {},
   formId: "login",
   user: null,
+  users: [],
   isAuthenticating: false,
   checkingAuthentication: false,
+  isUsersFetching: false,
+  onlineUsers: [],
 };
 
 // users slice
@@ -104,6 +146,12 @@ const usersSlice = createSlice({
     setErrors: (state, action: PayloadAction<IErrors>) => {
       state.errors = action.payload;
     },
+    setOnlineUsers: (state,action: PayloadAction<IOnlineUser[]>) => {
+      state.onlineUsers = action.payload
+    },
+    newUserSignupEvent: (state,action: PayloadAction<IUser>) => {
+      state.users.push(action.payload)
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -116,7 +164,10 @@ const usersSlice = createSlice({
         state.isAuthenticating = false;
         if (action.payload?.newUser) {
           state.user = action.payload.newUser;
+          state.users.push(action.payload.newUser);
           state.errors = {};
+          SOCKET.emit("newUserSignup",action.payload.newUser)
+          SOCKET.emit("newOnlineUser", action.payload.newUser);
         }
         if (action.payload.errors) {
           if (action.payload.errors?.username) {
@@ -143,6 +194,7 @@ const usersSlice = createSlice({
         if (action.payload?.user) {
           state.user = action.payload.user;
           state.errors = {};
+          SOCKET.emit("newOnlineUser", action.payload.user);
         }
         if (action.payload.errors) {
           if (action.payload.errors?.username) {
@@ -168,17 +220,38 @@ const usersSlice = createSlice({
         state.checkingAuthentication = false;
         if (action.payload?.user) {
           state.user = action.payload.user;
+          SOCKET.emit("newOnlineUser", action.payload.user);
         }
       })
       .addCase(isUserAuthenticated.rejected, (state) => {
         state.checkingAuthentication = false;
+      })
+      // get users
+      .addCase(getUsers.pending, (state) => {
+        state.isUsersFetching = true;
+      })
+      .addCase(getUsers.fulfilled, (state, action) => {
+        state.isUsersFetching = false;
+        if (action.payload.users) {
+          state.users = action.payload.users;
+        }
+      })
+      .addCase(getUsers.rejected, (state) => {
+        state.isUsersFetching = false;
+      })
+      // logout
+      .addCase(logout.fulfilled, (state, action) => {
+        if (action.payload.message === "user logged out successfully") {
+          state.user = null;
+          SOCKET.emit("removeOnlineUser")
+        }
       });
   },
 });
 
 // exports
 // actions
-export const { resetErrors, setFormId, setErrors } = usersSlice.actions;
+export const { resetErrors, setFormId, setErrors,setOnlineUsers , newUserSignupEvent} = usersSlice.actions;
 // selectors
 // form id selector
 export const formIdSelector = (state: RootState) => state.users.formId;
@@ -192,5 +265,10 @@ export const userSelector = (state: RootState) => state.users.user;
 // checking authentication selector
 export const checkingAuthenticationSelector = (state: RootState) =>
   state.users.checkingAuthentication;
+// users selector
+export const usersSelector = (state: RootState) => state.users.users;
+// online users
+export const onlineUsersSelector = (state: RootState) =>
+  state.users.onlineUsers;
 // reducer
 export default usersSlice.reducer;

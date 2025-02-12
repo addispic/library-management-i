@@ -72,7 +72,7 @@ export default function Menu() {
             key={item.text}
             className={`flex items-center gap-x-3 p-1.5 px-1.5 cursor-pointer border-b  transition-colors ease-in-out duration-150  relative after:absolute after:left-0 after:top-0 after:h-full after:w-[3px]  ${
               menu.selected === item.text
-                ? "after:bg-green-500 bg-green-50 text-green-500 hover:text-green-600 border-green-500"
+                ? "after:bg-green-500 bg-green-50 text-green-500 hover:text-green-600 border-neutral-200"
                 : "after:bg-transparent bg-transparent text-neutral-500 hover:text-neutral-700 border-neutral-200 hover:border-neutral-400"
             }`}
             onClick={() => {

@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 // icons
 import { FiSearch } from "react-icons/fi";
 import { CiClock2 } from "react-icons/ci";
@@ -5,7 +6,50 @@ import { AiOutlineLike } from "react-icons/ai";
 import { IoCartOutline } from "react-icons/io5";
 import { MdFavoriteBorder } from "react-icons/md";
 import { FaRegMessage } from "react-icons/fa6";
+import { BsTrash3 } from "react-icons/bs";
+import { AiOutlineClose } from "react-icons/ai";
+import { AiOutlineEdit } from "react-icons/ai";
+// hooks
+import { useAppDispatch, useAppSelector } from "../hooks";
+// slices
+import { userSelector } from "../features/users/usersSlice";
+import {
+  booksSelector,
+  IBook,
+  resetIsBookDeletingDone,
+  isBookDeletingSelector,
+  isBookDeletingDoneSelector,
+  deleteBook,
+  setIsBookEditOn,
+} from "../features/books/booksSlice";
+// components
+// informatics
+import GetUsername from "../components/informatics/GetUsername";
+import GetProfile from "../components/informatics/GetProfile";
+import GetDate from "../components/informatics/GetDate";
+import IsUserOnline from "../components/informatics/IsUserOnline";
+
 export default function Home() {
+  // states
+  // local states
+  const [isBookDeleteOn, setIsBookDeleteOn] = useState<IBook | null>(null);
+  // slices
+  // users
+  const user = useAppSelector(userSelector);
+  // books
+  const books = useAppSelector(booksSelector);
+  const isBookDeleting = useAppSelector(isBookDeletingSelector);
+  const isBookDeletingDone = useAppSelector(isBookDeletingDoneSelector);
+
+  // hooks
+  const dispatch = useAppDispatch();
+
+  // effects
+  useEffect(() => {
+    if (isBookDeletingDone) {
+      setIsBookDeleteOn(null);
+    }
+  }, [isBookDeletingDone]);
   return (
     <div className="flex-1 flex flex-col">
       {/* header */}
@@ -37,10 +81,200 @@ export default function Home() {
       </header>
       {/* books list */}
       <div className="flex-1 pr-1.5 max-h-[82vh] overflow-y-auto">
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quasi voluptatum commodi quibusdam sunt, ipsum reiciendis molestias blanditiis laudantium dignissimos, natus dolor eum adipisci omnis beatae aliquid, rem temporibus maxime? Ad rerum pariatur eius corporis. Quas alias natus minima, nihil aliquam voluptates ipsam magnam tempore nisi corporis? Aliquam enim explicabo necessitatibus. Saepe similique placeat quos fugit distinctio quis, veritatis facilis molestiae dolorem illo tempora maxime sapiente. Labore modi in suscipit ducimus sit corporis consectetur voluptas officia. Illo ratione soluta nihil exercitationem esse? Sapiente ipsa amet reprehenderit perferendis sequi placeat quae, officiis libero atque obcaecati sint optio laborum, fugit blanditiis nostrum, dolores aspernatur rerum rem voluptas reiciendis ullam est at voluptatum! Cum vitae ea, temporibus quisquam fugiat, excepturi vel incidunt explicabo, mollitia velit architecto repudiandae rem dignissimos ut magnam. Neque et ab eius aliquam dolor ipsam quas nihil, iusto corrupti minus autem, optio illo expedita error tenetur odio harum nobis sit voluptate aut dolores accusamus. Blanditiis, inventore? Explicabo libero doloremque iusto, molestias eos corrupti omnis eveniet delectus quidem! Cumque illum ea esse atque placeat mollitia tenetur veniam inventore quasi nulla, cupiditate ullam, eum accusantium aliquid, excepturi voluptatem iste sed delectus facilis. Atque rem repellat ullam voluptatum ut accusantium, quasi aliquid officiis. Nihil accusantium praesentium et quia omnis est ullam numquam recusandae odio quam, deleniti repudiandae tempore dolorem id sequi pariatur officia unde rem, enim obcaecati. Fugiat labore hic deserunt dicta aperiam, dolorem dolor consequuntur quisquam est accusantium praesentium voluptate! Ipsum, voluptate incidunt libero rerum, ad dolorum porro suscipit eius fugit natus sit aspernatur quidem repudiandae dolorem earum ut cum similique, quos id unde repellendus quod molestiae. Nisi qui praesentium deleniti quia? Laudantium commodi non fugiat alias voluptates quam, sunt ab doloremque harum illo quos voluptatum rem totam dolorem neque incidunt fugit labore ex quasi quaerat consequuntur tempore aspernatur saepe recusandae. Magnam, incidunt. Quod quibusdam sed molestias dicta, dolorum similique quam fugiat, odio perferendis exercitationem sit veritatis architecto voluptatum dolore quae vero totam tenetur rem vel quia. Nostrum non atque quod dolorem molestias architecto corporis quos, est iusto incidunt fugiat saepe soluta recusandae, harum nihil? Impedit, quam odit esse adipisci soluta quod voluptatum et. Quaerat, maxime ex repellendus necessitatibus velit temporibus iure dignissimos incidunt provident nemo veniam. Consectetur atque tempore, nam quia deserunt voluptatibus eos velit modi repellat aliquam reiciendis earum? Maxime ipsa aliquid pariatur neque, velit consectetur sapiente inventore autem ab quae unde voluptas esse dignissimos impedit repellat libero recusandae consequuntur, dolores quia hic est quos dolorem harum nemo. Cupiditate quibusdam veniam laboriosam delectus sit, harum repellendus voluptatibus enim quasi fugiat officia saepe minima repellat nostrum aut praesentium culpa rerum quae doloribus officiis commodi sed hic fuga. Accusantium asperiores sint odit ut placeat repudiandae dolorem expedita voluptatem laudantium aliquam, repellendus eius beatae, ipsum fugit esse, possimus modi rem dolorum? Ullam quaerat deserunt impedit, saepe veritatis nobis veniam commodi dignissimos laboriosam doloribus molestias corrupti vel velit facere aliquam beatae fuga cum. Nobis perspiciatis dicta pariatur ullam blanditiis laborum veritatis tenetur, deserunt totam praesentium obcaecati quisquam, reprehenderit neque nulla! Adipisci quasi voluptatum non debitis quaerat animi consectetur, architecto odit, obcaecati nisi amet nihil rem quam. Unde voluptatem id adipisci? Nam asperiores, saepe praesentium placeat cum sunt vel vero, sit quis aperiam dignissimos! Totam amet ad quaerat tenetur? Voluptates quisquam dignissimos itaque iste fuga vel magnam at quia harum totam veniam sit perspiciatis et illum, aut, impedit assumenda. Fugiat deserunt ipsum dicta ullam saepe blanditiis, odit eligendi nihil nesciunt tempora inventore officiis nostrum voluptas reprehenderit repellendus vero enim laudantium quo tempore quas provident ea omnis debitis consequuntur? Iusto provident error, distinctio nam asperiores molestias nostrum aliquid quibusdam odio alias. Atque, possimus voluptatem. Totam assumenda enim facilis earum commodi corporis. Architecto quia fugiat inventore aut, ratione quae neque doloribus quis, libero qui porro nulla, unde ducimus reprehenderit magnam aspernatur eos? Expedita officiis dolores consequatur doloremque? Deserunt temporibus alias quae molestiae odit, aperiam, eos et quasi nulla excepturi qui optio sint a? Quae quaerat non, itaque ex ab incidunt enim ducimus sequi asperiores exercitationem inventore repudiandae cumque, magnam, praesentium aut vel architecto. Minima hic corrupti dolorum magnam autem placeat itaque est cupiditate ratione ab atque qui quia necessitatibus debitis laborum, dolore suscipit laboriosam incidunt omnis ipsa saepe explicabo nesciunt enim. Consequatur repellendus saepe vitae quasi nisi explicabo soluta ad quae reprehenderit, deserunt dolor similique, vel assumenda debitis eaque repudiandae illo veritatis natus iusto culpa voluptates aperiam iste necessitatibus doloribus. Iusto dolorum vero dicta assumenda nulla facere, rerum recusandae delectus tenetur unde, ea, molestiae est quia inventore? Corrupti deleniti neque odit, accusantium quibusdam ea molestias. Tempora, et recusandae ab repudiandae libero veritatis perferendis ipsam corporis dolorum non quos quis ducimus qui earum! Deleniti repellendus blanditiis, dignissimos perspiciatis quaerat magni aliquam aperiam quod dolor non vero adipisci enim? Quam voluptatibus minus voluptates sint ratione, eligendi a aperiam corporis explicabo reprehenderit maxime porro accusantium commodi fuga animi officiis? Porro quidem iusto fuga dicta asperiores nostrum quaerat placeat illum iste accusamus est doloribus, molestiae beatae quasi adipisci distinctio optio magni labore molestias minus corrupti itaque expedita libero fugiat. Inventore ad quaerat, eum officia nihil ducimus, possimus commodi cupiditate nam incidunt aut impedit? Eos ipsum repellat ratione velit laudantium asperiores voluptatibus cupiditate facilis magnam nisi expedita ad saepe doloremque totam assumenda, accusamus commodi amet tempora? Distinctio odio quisquam labore, excepturi porro earum ullam quos architecto magni molestias dignissimos placeat ut. Iste, excepturi! Tempore, veniam earum eaque asperiores ullam nihil quod dicta facere delectus ipsa, accusamus magnam nisi magni libero cupiditate consequatur ipsum, quisquam enim labore eos aliquam fugiat inventore! Maiores laborum suscipit recusandae, aperiam saepe consectetur amet officia explicabo, quisquam inventore ex voluptates molestias id illo aut dolorum ratione possimus tempora enim dolorem praesentium? Eos voluptates minus eligendi ad quae laudantium dolor. Possimus quidem, sint labore accusantium itaque nihil officiis a earum, ad dignissimos illum minima praesentium cumque culpa. Eligendi laborum beatae veritatis ab quae iste harum eius doloribus sed eos facere ipsa quidem pariatur, distinctio reprehenderit quo consequatur quaerat officia rerum, officiis aliquam repudiandae placeat esse. Placeat id repellendus maxime quis a? Repellendus nisi ipsam esse pariatur omnis, qui adipisci sunt.
-        </p>
+        {books.length > 0 ? (
+          <>
+            {books.map((bookItem) => {
+              return (
+                <div key={bookItem._id} className="mb-10">
+                  {/* book content */}
+                  <div className="grid grid-cols-5">
+                    {/* left */}
+                    <div className="w-full h-full">
+                      <img
+                        className="w-full h-full object-center object-cover"
+                        src={bookItem.file}
+                        alt=""
+                      />
+                    </div>
+                    {/* right */}
+                    <div className="col-span-4 bg-white px-3 py-1 flex flex-col justify-between">
+                      <div>
+                        <header className="flex items-center justify-between">
+                          {/* left */}
+                          <div>
+                            <p>
+                              <span className="py-1 border-b border-neutral-300">
+                                {bookItem.title}
+                              </span>{" "}
+                              by{" "}
+                              <span className="text-sm text-neutral-400">
+                                {bookItem.author}
+                              </span>
+                            </p>
+                          </div>
+                          {/* date */}
+                          <div className="w-fit px-3 py-0.5 rounded-full text-xs bg-green-50/50 text-green-600">
+                            <span>{bookItem.total} available books</span>
+                          </div>
+                        </header>
+                        <div className="my-3">
+                          <p className="text-sm text-neutral-700">
+                            {bookItem.description}
+                          </p>
+                        </div>
+                      </div>
+                      <footer className="flex items-end justify-between">
+                        <div className="flex items-center gap-x-1 text-sm">
+                          <div className="relative">
+
+                          <div className="w-[28px] aspect-square rounded-full overflow-hidden shrink-0">
+                            <GetProfile _id={bookItem.user} flag="pro" />
+                          </div>
+                          <IsUserOnline _id={bookItem.user}/>
+                          </div>
+                          <div className="text-xs">
+                            <p>
+                              <GetUsername _id={bookItem.user} />
+                            </p>
+                            <p className="-mt-0.5 text-neutral-400 flex items-center gap-x-0.5">
+                              <CiClock2 />
+                              <span>
+                                <GetDate date={bookItem.date} />
+                              </span>
+                            </p>
+                          </div>
+                        </div>
+                        {/* actions */}
+                        <div className="flex items-center gap-x-3">
+                          {/* like */}
+                          <button className="flex items-center gap-x-0.5 cursor-pointer text-neutral-500 transition-colors ease-in-out duration-150 hover:text-green-500">
+                            <span className="text-sm">12</span>
+                            <AiOutlineLike className="text-lg" />
+                          </button>
+                          {/* favorite */}
+                          <button className="flex items-center gap-x-0.5 cursor-pointer text-neutral-500 transition-colors ease-in-out duration-150 hover:text-green-500">
+                            <MdFavoriteBorder className="text-lg" />
+                          </button>
+                          {/* comment */}
+                          <button className="flex items-center gap-x-0.5 cursor-pointer text-neutral-500 transition-colors ease-in-out duration-150 hover:text-green-500">
+                            <span className="text-sm">7</span>
+                            <FaRegMessage className="text-sm" />
+                          </button>
+                          {/* add to borrow */}
+                          <button className="flex items-center gap-x-0.5 cursor-pointer text-neutral-500 transition-colors ease-in-out duration-150 hover:text-green-500">
+                            <span className="text-sm">add</span>
+                            <IoCartOutline className="text-xl" />
+                          </button>
+                          {/* edit book */}
+                          {user?._id === bookItem.user && (
+                            <button
+                              className="flex items-center gap-x-0.5 cursor-pointer text-neutral-500 transition-colors ease-in-out duration-150 hover:text-green-500"
+                              onClick={() => {
+                                // setIsBookDeleteOn(bookItem);
+                                dispatch(setIsBookEditOn(bookItem));
+                              }}
+                            >
+                              <span className="text-sm">edit</span>
+                              <AiOutlineEdit className="text-xl" />
+                            </button>
+                          )}
+                          {/* delete book */}
+                          {user?._id === bookItem.user && (
+                            <button
+                              className="flex items-center gap-x-0.5 cursor-pointer text-neutral-500 transition-colors ease-in-out duration-150 hover:text-red-500"
+                              onClick={() => {
+                                setIsBookDeleteOn(bookItem);
+                                dispatch(setIsBookEditOn(null));
+                                dispatch(resetIsBookDeletingDone());
+                              }}
+                            >
+                              <BsTrash3 />
+                            </button>
+                          )}
+                        </div>
+                      </footer>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </>
+        ) : (
+          <div>No Books</div>
+        )}
       </div>
+      {/* delete conformation */}
+      {isBookDeleteOn && (
+        <div
+          className={`fixed  left-0 top-0 w-screen h-screen overflow-hidden flex items-center justify-center bg-black/50 z-30 `}
+        >
+          <div className={`w-96 shrink-0 bg-white rounded-md p-5 relative`}>
+            {/* close btn */}
+            <button
+              className="absolute right-1.5 top-1.5 flex items-center justify-center w-[24px] cursor-pointer rounded-sm aspect-square bg-neutral-100 text-neutral-400 transition-colors ease-in-out duration-150 hover:bg-red-200 hover:text-red-500"
+              onClick={() => {
+                setIsBookDeleteOn(null);
+              }}
+            >
+              <AiOutlineClose />
+            </button>
+            {/* book detail */}
+            <div className="flex items-center gap-x-1.5">
+              {/* img */}
+              <div className="w-[50px] aspect-square rounded-sm overflow-hidden">
+                <img
+                  className="w-full h-full object-center object-cover"
+                  src={isBookDeleteOn?.file}
+                  alt=""
+                />
+              </div>
+              {/* title & author */}
+              <div>
+                <p className="text-neutral-500 font-medium">
+                  {isBookDeleteOn.title}
+                </p>
+                <p className="text-sm">
+                  by{" "}
+                  <span className="text-stone-500">
+                    {isBookDeleteOn.author}
+                  </span>
+                </p>
+              </div>
+            </div>
+            {/* warning text */}
+            <div className="my-1.5 text-sm italic text-neutral-700">
+              <p>
+                Are you sure you want to delete this book? Remember the actions
+                is undone.
+              </p>
+            </div>
+            {/* buttons */}
+            <div className="flex items-center gap-x-5 mt-3">
+              <button
+                disabled={isBookDeleting}
+                className="px-5 py-0.5 rounded-full text-sm bg-red-500 text-white cursor-pointer transition-colors ease-in-out duration-150 hover:bg-red-400"
+                onClick={() => {
+                  dispatch(deleteBook(isBookDeleteOn._id));
+                }}
+              >
+                {isBookDeleting ? (
+                  <div className="w-[18px] aspect-square rounded-full shrink-0 border border-white animate-spin border-r-transparent" />
+                ) : (
+                  <span>Yes</span>
+                )}
+              </button>
+              <button
+                onClick={() => {
+                  setIsBookDeleteOn(null);
+                }}
+                className="px-5 py-0.5 rounded-full text-sm bg-neutral-500 text-white cursor-pointer transition-colors ease-in-out duration-150 hover:bg-neutral-400"
+              >
+                No
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

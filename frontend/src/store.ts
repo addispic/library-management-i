@@ -5,6 +5,7 @@ import menu from "./features/menu/menuSlice";
 import users from "./features/users/usersSlice";
 import profiles from "./features/profiles/profilesSlice";
 import books from "./features/books/booksSlice";
+import borrows from './features/borrows/borrowsSlice'
 
 // store
 export const store = configureStore({
@@ -13,6 +14,7 @@ export const store = configureStore({
     menu,
     profiles,
     books,
+    borrows,
   },
 });
 

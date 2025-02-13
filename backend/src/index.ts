@@ -20,6 +20,8 @@ import usersRoutes from "./routes/users.routes";
 import profilesRoutes from "./routes/profiles.routes";
 // books
 import booksRoutes from "./routes/books.routes";
+// borrow
+import borrowRoutes from "./routes/borrow.routes";
 
 // port
 const PORT = process.env.PORT || 5000;
@@ -43,6 +45,8 @@ app.use("/api/users", usersRoutes);
 app.use("/api/profiles", privateRoutes(), profilesRoutes);
 // books
 app.use("/api/books", privateRoutes(), booksRoutes);
+// borrow
+app.use("/api/borrows",privateRoutes(),  borrowRoutes);
 
 // listening
 server.listen(PORT, async () => {

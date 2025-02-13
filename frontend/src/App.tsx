@@ -14,12 +14,23 @@ import {
   userSelector,
   getUsers,
   setOnlineUsers,
-  newUserSignupEvent
+  newUserSignupEvent,
 } from "./features/users/usersSlice";
 // profiles
-import { getProfiles, newProfileEvent,profileUpdateEvent } from "./features/profiles/profilesSlice";
+import {
+  getProfiles,
+  newProfileEvent,
+  profileUpdateEvent,
+} from "./features/profiles/profilesSlice";
 // books
-import { getBooks , newBookEvent, updateBookEvent,deleteBookEvent} from "./features/books/booksSlice";
+import {
+  getBooks,
+  newBookEvent,
+  updateBookEvent,
+  deleteBookEvent,
+} from "./features/books/booksSlice";
+// borrows
+import { getBorrows, getIBorrows } from "./features/borrows/borrowsSlice";
 // pages
 import PrivateRoutes from "./pages/PrivateRoutes";
 import Authentication from "./pages/Authentication";
@@ -42,32 +53,34 @@ export default function App() {
       dispatch(getUsers());
       dispatch(getProfiles());
       dispatch(getBooks());
+      dispatch(getBorrows());
+      dispatch(getIBorrows());
 
       // socket
       // books
-      SOCKET.on("newBookEvent",newBook => {
-        dispatch(newBookEvent(newBook))
-      })
-      SOCKET.on("updateBookEvent",updatedBook => {
-        dispatch(updateBookEvent(updatedBook))
-      })
-      SOCKET.on("deleteBookEvent",_id => {
-        dispatch(deleteBookEvent(_id))
-      })
+      SOCKET.on("newBookEvent", (newBook) => {
+        dispatch(newBookEvent(newBook));
+      });
+      SOCKET.on("updateBookEvent", (updatedBook) => {
+        dispatch(updateBookEvent(updatedBook));
+      });
+      SOCKET.on("deleteBookEvent", (_id) => {
+        dispatch(deleteBookEvent(_id));
+      });
       // users
       SOCKET.on("getOnlineUsersEvent", (data) => {
-        dispatch(setOnlineUsers(data))
+        dispatch(setOnlineUsers(data));
       });
-      SOCKET.on("newUserSignupEvent",user => {
-        dispatch(newUserSignupEvent(user))
-      })
+      SOCKET.on("newUserSignupEvent", (user) => {
+        dispatch(newUserSignupEvent(user));
+      });
       // profiles
-      SOCKET.on("newProfileEvent",newProfile => {
-        dispatch(newProfileEvent(newProfile))
-      })
-      SOCKET.on("profileUpdateEvent",updatedProfile => {
-        dispatch(profileUpdateEvent(updatedProfile))
-      })
+      SOCKET.on("newProfileEvent", (newProfile) => {
+        dispatch(newProfileEvent(newProfile));
+      });
+      SOCKET.on("profileUpdateEvent", (updatedProfile) => {
+        dispatch(profileUpdateEvent(updatedProfile));
+      });
     }
   }, [user]);
   if (checkingAuthentication) return <div>Authenticating...</div>;

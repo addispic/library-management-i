@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { FiSearch } from "react-icons/fi";
 import { CiClock2 } from "react-icons/ci";
 import { AiOutlineLike } from "react-icons/ai";
-import { IoCartOutline } from "react-icons/io5";
 import { MdFavoriteBorder } from "react-icons/md";
 import { FaRegMessage } from "react-icons/fa6";
 import { BsTrash3 } from "react-icons/bs";
@@ -23,16 +22,19 @@ import {
   setIsBookEditOn,
 } from "../features/books/booksSlice";
 // components
+import BorrowHandler from "../components/BorrowHandler";
 // informatics
 import GetUsername from "../components/informatics/GetUsername";
 import GetProfile from "../components/informatics/GetProfile";
 import GetDate from "../components/informatics/GetDate";
 import IsUserOnline from "../components/informatics/IsUserOnline";
+import GetBorrowNumber from "../components/informatics/GetBorrowNumber";
 
 export default function Home() {
   // states
   // local states
   const [isBookDeleteOn, setIsBookDeleteOn] = useState<IBook | null>(null);
+  const [filter, setFilter] = useState("");
   // slices
   // users
   const user = useAppSelector(userSelector);
@@ -68,13 +70,40 @@ export default function Home() {
         </div>
         {/* right */}
         <div className="flex items-center gap-x-3">
-          <button className="px-1.5 py-1 rounded-sm bg-white shadow-sm text-sm text-neutral-500 cursor-pointer border-2 border-white">
+          <button
+            onClick={() => {
+              setFilter("");
+            }}
+            className={`px-1.5 py-1 rounded-sm bg-white shadow-sm text-sm cursor-pointer border transition-colors ease-in-out duration-300 ${
+              !filter
+                ? "border-green-500 text-green-500"
+                : "border-white text-neutral-500"
+            }`}
+          >
             All Books
           </button>
-          <button className="px-1.5 py-1 rounded-sm bg-white shadow-sm text-sm text-neutral-500 cursor-pointer border-2 border-white">
+          <button
+            onClick={() => {
+              setFilter("Educational");
+            }}
+            className={`px-1.5 py-1 rounded-sm bg-white shadow-sm text-sm  cursor-pointer border transition-colors ease-in-out duration-300 ${
+              filter === "Educational"
+                ? "border-green-500 text-green-500"
+                : "border-white text-neutral-500"
+            }`}
+          >
             Educational
           </button>
-          <button className="px-1.5 py-1 rounded-sm bg-white shadow-sm text-sm text-neutral-500 cursor-pointer border-2 border-white">
+          <button
+            onClick={() => {
+              setFilter("Fiction");
+            }}
+            className={`px-1.5 py-1 rounded-sm bg-white shadow-sm text-sm  cursor-pointer border transition-colors ease-in-out duration-300 ${
+              filter === "Fiction"
+                ? "border-green-500 text-green-500"
+                : "border-white text-neutral-500"
+            }`}
+          >
             Fictions
           </button>
         </div>
@@ -84,6 +113,7 @@ export default function Home() {
         {books.length > 0 ? (
           <>
             {books.map((bookItem) => {
+              if (filter && filter !== bookItem.category) return null;
               return (
                 <div key={bookItem._id} className="mb-10">
                   {/* book content */}
@@ -113,9 +143,10 @@ export default function Home() {
                             </p>
                           </div>
                           {/* date */}
-                          <div className="w-fit px-3 py-0.5 rounded-full text-xs bg-green-50/50 text-green-600">
-                            <span>{bookItem.total} available books</span>
-                          </div>
+                          <GetBorrowNumber
+                            total={bookItem.total}
+                            _id={bookItem._id}
+                          />
                         </header>
                         <div className="my-3">
                           <p className="text-sm text-neutral-700">
@@ -126,11 +157,10 @@ export default function Home() {
                       <footer className="flex items-end justify-between">
                         <div className="flex items-center gap-x-1 text-sm">
                           <div className="relative">
-
-                          <div className="w-[28px] aspect-square rounded-full overflow-hidden shrink-0">
-                            <GetProfile _id={bookItem.user} flag="pro" />
-                          </div>
-                          <IsUserOnline _id={bookItem.user}/>
+                            <div className="w-[28px] aspect-square rounded-full overflow-hidden shrink-0">
+                              <GetProfile _id={bookItem.user} flag="pro" />
+                            </div>
+                            <IsUserOnline _id={bookItem.user} />
                           </div>
                           <div className="text-xs">
                             <p>
@@ -161,10 +191,7 @@ export default function Home() {
                             <FaRegMessage className="text-sm" />
                           </button>
                           {/* add to borrow */}
-                          <button className="flex items-center gap-x-0.5 cursor-pointer text-neutral-500 transition-colors ease-in-out duration-150 hover:text-green-500">
-                            <span className="text-sm">add</span>
-                            <IoCartOutline className="text-xl" />
-                          </button>
+                          <BorrowHandler bookItem={bookItem} />
                           {/* edit book */}
                           {user?._id === bookItem.user && (
                             <button

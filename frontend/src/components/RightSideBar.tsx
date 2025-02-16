@@ -1,6 +1,7 @@
 import { useState } from "react";
 // icons
 import { FaCamera } from "react-icons/fa";
+import { LuArrowLeftToLine } from "react-icons/lu";
 // hooks
 import { useAppSelector, useAppDispatch } from "../hooks";
 // slices
@@ -15,6 +16,7 @@ import {
 import AddNewBook from "./AddNewBook";
 // informatics
 import GetProfile from "./informatics/GetProfile";
+import { rightSideBarToggler } from "../utils/handlers";
 
 export default function RightSideBar() {
   // states
@@ -39,9 +41,28 @@ export default function RightSideBar() {
   };
 
   return (
-    <div className="w-96 shrink-0 h-full">
-      <div className="px-5 py-1.5 h-full w-full">
-        <div className="h-full w-full bg-white shadow-2xl rounded-md overflow-hidden flex flex-col">
+    <div
+      className="absolute right-0 top-0 w-0 bg-black/50 z-40 lg:bg-transparent flex justify-end overflow-hidden lg:relative lg:w-96 shrink-0 h-full transition-all ease-in-out duration-150"
+      id="right-side-bar"
+      onClick={() => {
+        rightSideBarToggler();
+      }}
+    >
+      <div className="px-1.5 lg:px-5 py-1.5 h-full w-96 lg:w-full">
+        <div
+          className="h-full w-full bg-white shadow-2xl rounded-md overflow-hidden flex flex-col relative"
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
+          <button
+            className="absolute top-1.5 left-1.5 z-40 lg:hidden  border border-neutral-200 rounded-sm p-1 text-neutral-400 cursor-pointer transition-colors ease-in-out duration-150 bg-neutral-200 hover:border-neutral-500 hover:bg-neutral-500 hover:text-white"
+            onClick={() => {
+              rightSideBarToggler();
+            }}
+          >
+            <LuArrowLeftToLine className="rotate-180" />
+          </button>
           {/* bg image */}
           <div className="w-full h-[120px] overflow-hidden relative">
             {/* image picker */}

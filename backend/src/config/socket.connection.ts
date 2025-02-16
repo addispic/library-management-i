@@ -41,6 +41,20 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("deleteBookEvent",_id)
   })
 
+  // borrows
+  // new borrow
+  socket.on("newBorrow",newBorrow => {
+    socket.broadcast.emit("newBorrowEvent",newBorrow)
+  })
+  // update borrow
+  socket.on("updateBorrow",updateBorrow => {
+    socket.broadcast.emit("updateBorrowEvent",updateBorrow)
+  })
+  // delete borrow
+  socket.on("deleteBorrow",deleteBorrow => {
+    socket.broadcast.emit("deleteBorrowEvent",deleteBorrow)
+  })
+
   // profile
   // new profile
   socket.on("newProfile", (newProfile) => {
@@ -56,6 +70,11 @@ io.on("connection", (socket) => {
   socket.on("newUserSignup", (user) => {
     socket.broadcast.emit("newUserSignupEvent", user);
   });
+
+  // user role update
+  socket.on("userRoleUpdate",updatedUser => {
+    socket.broadcast.emit("userRoleUpdateEvent",updatedUser)
+  })
 
   // new online user
   socket.on("newOnlineUser", (user) => {

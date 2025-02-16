@@ -9,12 +9,14 @@ import { useAppDispatch, useAppSelector } from "../hooks";
 // menu
 import { menuIdSetter } from "../features/menu/menuSlice";
 // users
-import { usersSelector, userSelector } from "../features/users/usersSlice";
+import { usersSelector, userSelector , setIsMemberSelected,isMemberSelectedSelector} from "../features/users/usersSlice";
 // components
 // informatics
 import GetUsername from "./informatics/GetUsername";
 import GetProfile from "./informatics/GetProfile";
 import IsUserOnline from "./informatics/IsUserOnline";
+// utils
+import { leftSideBarTogglerHandler } from "../utils/handlers";
 export default function Members() {
   // states
   // local
@@ -24,9 +26,11 @@ export default function Members() {
   // users
   const users = useAppSelector(usersSelector);
   const user = useAppSelector(userSelector);
+  const isMemberSelected = useAppSelector(isMemberSelectedSelector)
   // hooks
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
   return (
     <div className="flex-1 border-t border-neutral-200 pt-3 flex flex-col">
       {/* header */}
@@ -65,6 +69,7 @@ export default function Members() {
         <button
           onClick={() => {
             dispatch(menuIdSetter("normal"));
+            leftSideBarTogglerHandler()
             navigate("/");
           }}
           className="text-neutral-400 transition-colors ease-in-out duration-150 hover:text-green-500 cursor-pointer text-xl"
@@ -82,16 +87,19 @@ export default function Members() {
                 <div
                   key={userItem._id}
                   className={`flex items-center gap-x-1.5 p-1.5 relative after:absolute after:left-0 after:top-0 after:h-full after:w-[3px] ${
-                    2 === 2 ? "after:bg-green-500 " : "after:bg-transparent"
+                    isMemberSelected?._id === userItem._id ? "after:bg-green-500 " : "after:bg-transparent"
                   }`}
+                  onClick={() => {
+                    leftSideBarTogglerHandler();
+                    dispatch(setIsMemberSelected(userItem))
+                  }}
                 >
                   {/* image */}
                   <div className="relative">
-
-                  <div className="w-[32px] aspect-square rounded-full overflow-hidden shrink-0 ">
-                    <GetProfile _id={userItem._id} flag="pro" />
-                  </div>
-                  <IsUserOnline _id={userItem._id}/>
+                    <div className="w-[32px] aspect-square rounded-full overflow-hidden shrink-0 ">
+                      <GetProfile _id={userItem._id} flag="pro" />
+                    </div>
+                    <IsUserOnline _id={userItem._id} />
                   </div>
                   {/* text */}
                   <div className="border-b border-neutral-300 w-full transition-colors ease-in-out duration-150 hover:border-green-500 cursor-pointer text-sm text-neutral-500">

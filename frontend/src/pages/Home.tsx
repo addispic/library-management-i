@@ -53,11 +53,11 @@ export default function Home() {
     }
   }, [isBookDeletingDone]);
   return (
-    <div className="flex-1 flex flex-col">
+    <div className="flex-1 flex flex-col px-3 xl:px-0">
       {/* header */}
       <header className="flex items-center justify-between mb-3.5">
         {/* left */}
-        <div className="w-[40%]">
+        <div className="hidden sm:inline-block w-[40%]">
           {/* search */}
           <div className="flex items-center gap-x-0.5 border border-neutral-200 rounded-sm p-1.5 bg-white">
             <FiSearch className="text-xl text-neutral-500" />
@@ -129,7 +129,7 @@ export default function Home() {
                     {/* right */}
                     <div className="col-span-4 bg-white px-3 py-1 flex flex-col justify-between">
                       <div>
-                        <header className="flex items-center justify-between">
+                        <header className="flex flex-col gap-y-1.5 sm:flex-row sm:items-center sm:justify-between">
                           {/* left */}
                           <div>
                             <p>
@@ -177,16 +177,16 @@ export default function Home() {
                         {/* actions */}
                         <div className="flex items-center gap-x-3">
                           {/* like */}
-                          <button className="flex items-center gap-x-0.5 cursor-pointer text-neutral-500 transition-colors ease-in-out duration-150 hover:text-green-500">
+                          <button className="hidden sm:flex items-center gap-x-0.5 cursor-pointer text-neutral-500 transition-colors ease-in-out duration-150 hover:text-green-500">
                             <span className="text-sm">12</span>
                             <AiOutlineLike className="text-lg" />
                           </button>
                           {/* favorite */}
-                          <button className="flex items-center gap-x-0.5 cursor-pointer text-neutral-500 transition-colors ease-in-out duration-150 hover:text-green-500">
+                          <button className="hidden sm:flex items-center gap-x-0.5 cursor-pointer text-neutral-500 transition-colors ease-in-out duration-150 hover:text-green-500">
                             <MdFavoriteBorder className="text-lg" />
                           </button>
                           {/* comment */}
-                          <button className="flex items-center gap-x-0.5 cursor-pointer text-neutral-500 transition-colors ease-in-out duration-150 hover:text-green-500">
+                          <button className="hidden sm:flex items-center gap-x-0.5 cursor-pointer text-neutral-500 transition-colors ease-in-out duration-150 hover:text-green-500">
                             <span className="text-sm">7</span>
                             <FaRegMessage className="text-sm" />
                           </button>

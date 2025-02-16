@@ -20,11 +20,11 @@ export default function PrivateRoutes() {
   return (
     <div className="w-screen h-screen overflow-hidden">
       {user ? (
-        <div className="w-screen h-screen flex">
+        <div className="w-screen h-screen flex relative">
           {/* left */}
           <LeftSideBar />
           {/* content */}
-          <div className="flex-1 flex flex-col gap-y-1.5">
+          <div className="flex-1 flex flex-col gap-y-1.5 relative">
             {/* header */}
             <Header />
 

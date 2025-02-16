@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 // hooks
 import { useAppSelector } from "../../hooks";
 // slices
@@ -14,8 +15,11 @@ export default function GetBorrowNumber({
   // slices
   // borrows
   const borrows = useAppSelector(borrowsSelector);
-  const isBorrowed =
-    borrows.find((br) => br.book === _id)?.borrows?.length || 0;
+  let isBorrowed = borrows.find((br) => br.book === _id)?.borrows?.length || 0;
+  // effects
+  useEffect(() => {
+    isBorrowed = borrows.find((br) => br.book === _id)?.borrows?.length || 0;
+  }, [borrows]);
   return (
     <div className="flex items-center gap-x-1.5 text-sm">
       <div className="px-1.5 py-0.5 rounded-full bg-neutral-100 text-neutral-600">

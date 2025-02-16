@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import mongoose from 'mongoose'
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -9,7 +10,7 @@ import UsersModel from "../models/users.model";
 // utils
 import { MAX_AGE, errorHandler, generateToken } from "../utils/users.utils";
 
-// scret
+// secret
 const secret = process.env.SECRET as string;
 
 // get users
@@ -112,6 +113,24 @@ const login = async (req: Request, res: Response) => {
   }
 };
 
+// update role
+const updateUserRole = async (req: Request, res: Response) => {
+  try {
+    const { role } = req.body;
+    const {_id} = req.params 
+    const userId = req._id 
+    const isUserSuper = await UsersModel.findById(new mongoose.Types.ObjectId(userId)) 
+   
+    if(!isUserSuper && isUserSuper?.role !== "super"){
+      return res.status(400).json({error: 'unauthorized to update user role'})
+    }
+    const updatedUser = await UsersModel.findByIdAndUpdate(_id,{role},{new: true,runValidators: true})
+    return res.status(200).json({ message: "user role updated successfully" ,_id: updatedUser._id,role: updatedUser.role});
+  } catch (err) {
+    return res.status(400).json({ message: "update user role error" });
+  }
+};
+
 // logout
 const logout = (req: Request, res: Response) => {
   try {
@@ -143,4 +162,4 @@ const isAuthenticated = async (req: Request, res: Response) => {
 };
 
 // exports
-export { getUsers, signup, login, logout, isAuthenticated };
+export { getUsers, signup, login, updateUserRole, logout, isAuthenticated };

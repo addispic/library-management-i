@@ -39,6 +39,8 @@ type IInitialState = {
   checkingAuthentication: boolean;
   isUsersFetching: boolean;
   onlineUsers: IOnlineUser[];
+  isMemberSelected: IUser | null;
+  isUserRoleUpdating: boolean;
 };
 
 // login
@@ -70,6 +72,24 @@ export const signup = createAsyncThunk(
         return err.response?.data;
       } else {
         return { errors: { flag: "unexpected error has occurred, login" } };
+      }
+    }
+  }
+);
+
+// update user role
+export const updateUserRole = createAsyncThunk(
+  "users/updateUserRole",
+  async (data: { _id: string; role: string }) => {
+    try {
+      const { _id, role } = data;
+      const response = await axios.put(`/api/users/update/${_id}`, { role });
+      return response.data;
+    } catch (err) {
+      if (isAxiosError(err)) {
+        return err.response?.data;
+      } else {
+        return { error: "user role update failed" };
       }
     }
   }
@@ -127,6 +147,8 @@ const initialState: IInitialState = {
   checkingAuthentication: false,
   isUsersFetching: false,
   onlineUsers: [],
+  isMemberSelected: null,
+  isUserRoleUpdating: false,
 };
 
 // users slice
@@ -146,12 +168,28 @@ const usersSlice = createSlice({
     setErrors: (state, action: PayloadAction<IErrors>) => {
       state.errors = action.payload;
     },
-    setOnlineUsers: (state,action: PayloadAction<IOnlineUser[]>) => {
-      state.onlineUsers = action.payload
+    setOnlineUsers: (state, action: PayloadAction<IOnlineUser[]>) => {
+      state.onlineUsers = action.payload;
     },
-    newUserSignupEvent: (state,action: PayloadAction<IUser>) => {
-      state.users.push(action.payload)
-    }
+    newUserSignupEvent: (state, action: PayloadAction<IUser>) => {
+      state.users.push(action.payload);
+    },
+    setIsMemberSelected: (state, action: PayloadAction<IUser | null>) => {
+      state.isMemberSelected = action.payload;
+    },
+    userRoleUpdateEvent: (state, action) => {
+      const { _id, role } = action.payload;
+      const index = state.users.findIndex((usr) => usr._id === _id);
+      if (index !== -1) {
+        state.users[index].role = role;
+        if (state.user) {
+          state.user.role = role;
+        }
+        if (state.isMemberSelected) {
+          state.isMemberSelected.role = role;
+        }
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -166,7 +204,7 @@ const usersSlice = createSlice({
           state.user = action.payload.newUser;
           state.users.push(action.payload.newUser);
           state.errors = {};
-          SOCKET.emit("newUserSignup",action.payload.newUser)
+          SOCKET.emit("newUserSignup", action.payload.newUser);
           SOCKET.emit("newOnlineUser", action.payload.newUser);
         }
         if (action.payload.errors) {
@@ -243,15 +281,45 @@ const usersSlice = createSlice({
       .addCase(logout.fulfilled, (state, action) => {
         if (action.payload.message === "user logged out successfully") {
           state.user = null;
-          SOCKET.emit("removeOnlineUser")
+          SOCKET.emit("removeOnlineUser");
         }
+      })
+      // update user role
+      .addCase(updateUserRole.pending, (state) => {
+        state.isUserRoleUpdating = true;
+      })
+      .addCase(updateUserRole.fulfilled, (state, action) => {
+        state.isUserRoleUpdating = false;
+        if (action.payload.message === "user role updated successfully") {
+          SOCKET.emit("userRoleUpdate", action.payload);
+          const { _id, role } = action.payload;
+          const index = state.users.findIndex((usr) => usr._id === _id);
+          if (index !== -1) {
+            console.log(state.users[index].role, role);
+            state.users[index].role = role;
+            if (state.isMemberSelected) {
+              state.isMemberSelected.role = role;
+            }
+          }
+        }
+      })
+      .addCase(updateUserRole.rejected, (state) => {
+        state.isUserRoleUpdating = false;
       });
   },
 });
 
 // exports
 // actions
-export const { resetErrors, setFormId, setErrors,setOnlineUsers , newUserSignupEvent} = usersSlice.actions;
+export const {
+  resetErrors,
+  setFormId,
+  setErrors,
+  setOnlineUsers,
+  newUserSignupEvent,
+  setIsMemberSelected,
+  userRoleUpdateEvent,
+} = usersSlice.actions;
 // selectors
 // form id selector
 export const formIdSelector = (state: RootState) => state.users.formId;
@@ -260,6 +328,9 @@ export const errorsSelector = (state: RootState) => state.users.errors;
 // is authenticating selector
 export const isAuthenticatingSelector = (state: RootState) =>
   state.users.isAuthenticating;
+// is member selected
+export const isMemberSelectedSelector = (state: RootState) =>
+  state.users.isMemberSelected;
 // user selector
 export const userSelector = (state: RootState) => state.users.user;
 // checking authentication selector

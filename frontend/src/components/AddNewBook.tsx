@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
 // icons
 import { MdKeyboardArrowDown } from "react-icons/md";
+import { BsEmojiSmileUpsideDown } from "react-icons/bs";
 // hooks
 import { useAppSelector, useAppDispatch } from "../hooks";
 // slices
+// users
+import { userSelector } from "../features/users/usersSlice";
 // books
 import {
   addNewBook,
@@ -14,9 +17,13 @@ import {
   setIsBookEditOn,
   updateBook,
 } from "../features/books/booksSlice";
+// utils
+import { rightSideBarToggler } from "../utils/handlers";
 export default function AddNewBook() {
   // states
   // slices
+  // users
+  const user = useAppSelector(userSelector);
   // books
   const isBookUploading = useAppSelector(isBookUploadingSelector);
   const isBookUploadingDone = useAppSelector(isBookUploadingDoneSelector);
@@ -49,6 +56,7 @@ export default function AddNewBook() {
   // effect
   useEffect(() => {
     if (isBookUploadingDone) {
+      rightSideBarToggler();
       setFile(null);
       setFocus("");
       setTitle("");
@@ -64,7 +72,7 @@ export default function AddNewBook() {
         };
       });
       setDescription("");
-      dispatch(setIsBookEditOn(null))
+      dispatch(setIsBookEditOn(null));
     }
   }, [isBookUploadingDone]);
 
@@ -149,7 +157,15 @@ export default function AddNewBook() {
     }
   };
   return (
-    <div className="p-3">
+    <div className="p-3 relative">
+      {user?.role === "normal" && (
+        <div className="absolute inset-1.5 rounded-md overflow-hidden flex items-center justify-center z-30 bg-black/70 font-black text-white">
+          <div className="flex flex-col items-center justify-center gap-1.5">
+            <BsEmojiSmileUpsideDown className="text-5xl text-neutral-400" />
+            <h3>Not allowed!!!</h3>
+          </div>
+        </div>
+      )}
       {/* header */}
       <header className="py-0.5 border-b border-neutral-200 text-neutral-400">
         <h3 className="font-medium">

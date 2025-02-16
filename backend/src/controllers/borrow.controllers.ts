@@ -52,6 +52,26 @@ const getBorrows = async (req: Request, res: Response) => {
   }
 };
 
+// get borrow detail
+const getBorrowDetail = async (req: Request, res: Response) => {
+  try {
+    const borrowsDetail = await BorrowModel.find()
+      .select({
+        _id: 1,
+        user: 1,
+        book: 1,
+        duration: 1,
+        status: 1,
+        createdAt: 1,
+        updatedAt: 1,
+      })
+      .sort({ createdAt: -1 });
+    return res.status(200).json({ borrowsDetail });
+  } catch (err) {
+    return res.status(400).json({ error: "get borrows detail error" });
+  }
+};
+
 // i borrows
 const iBorrows = async (req: Request, res: Response) => {
   try {
@@ -131,14 +151,26 @@ const deleteBorrow = async (req: Request, res: Response) => {
         .status(400)
         .json({ error: "unauthorized to delete the borrow" });
     }
+    const isBorrowExist = await BorrowModel.findById(_id)
+    if(!isBorrowExist){
+      return res.status(400).json({error: 'borrow not exist'})
+    }
+    const {book} = isBorrowExist
     await BorrowModel.findByIdAndDelete(_id);
     return res
       .status(200)
-      .json({ message: "borrow deleted successfully", _id });
+      .json({ message: "borrow deleted successfully", _id,book });
   } catch (err) {
     return res.status(400).json({ error: "delete borrow error" });
   }
 };
 
 // exports
-export { getBorrows, iBorrows, newBorrow, updateBorrow, deleteBorrow };
+export {
+  getBorrows,
+  iBorrows,
+  newBorrow,
+  updateBorrow,
+  deleteBorrow,
+  getBorrowDetail,
+};

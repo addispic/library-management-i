@@ -4,6 +4,7 @@ import { Router, Request, Response } from "express";
 // borrow
 import {
   getBorrows,
+  getBorrowDetail,
   iBorrows,
   newBorrow,
   updateBorrow,
@@ -17,7 +18,10 @@ const router = Router();
 router.get("/", (req: Request, res: Response) => {
   getBorrows(req, res);
 });
-
+// get borrows detail
+router.get("/details", (req: Request, res: Response) => {
+  getBorrowDetail(req, res);
+});
 // get book and user
 router.get("/i-borrows", (req: Request, res: Response) => {
   iBorrows(req, res);

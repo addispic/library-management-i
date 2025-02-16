@@ -7,10 +7,14 @@ import { MdOutlineFavorite } from "react-icons/md";
 import { ImUsers } from "react-icons/im";
 import { FaBoxOpen } from "react-icons/fa";
 // hooks
-import { useAppDispatch } from "../hooks";
+import { useAppDispatch, useAppSelector } from "../hooks";
 // slices
+// user
+import {userSelector} from '../features/users/usersSlice'
 // menu
 import { menuIdSetter } from "../features/menu/menuSlice";
+// utils
+import {leftSideBarTogglerHandler} from '../utils/handlers'
 export default function Menu() {
   // states
   // local states
@@ -33,8 +37,8 @@ export default function Menu() {
       },
       {
         icon: FaBoxOpen,
-        text: "I Borrowed",
-        path: "/i-borrowed",
+        text: "Actions",
+        path: "/actions",
       },
       {
         icon: ImUsers,
@@ -44,6 +48,8 @@ export default function Menu() {
     ],
     selected: "Books store",
   });
+  // slices
+  const user = useAppSelector(userSelector)
 
   // hooks
   const navigate = useNavigate();
@@ -62,11 +68,13 @@ export default function Menu() {
       dispatch(menuIdSetter("members"));
     } else {
       dispatch(menuIdSetter("normal"));
+      leftSideBarTogglerHandler()
     }
   };
   return (
     <div className="flex-1 border-t border-neutral-200 pt-3">
       {menu.options.map((item) => {
+        if(user?.role !== "super" && item.text === "Actions") return null
         return (
           <div
             key={item.text}
@@ -77,6 +85,7 @@ export default function Menu() {
             }`}
             onClick={() => {
               navigationHandler(item.text, item.path);
+              
             }}
           >
             {/* icon */}

@@ -2,6 +2,7 @@
 import { TbSettingsCog } from "react-icons/tb";
 import { IoExitOutline } from "react-icons/io5";
 import { GiBookmark } from "react-icons/gi";
+import { LuArrowLeftToLine } from "react-icons/lu";
 // hooks
 import { useAppSelector, useAppDispatch } from "../hooks";
 // slices
@@ -10,6 +11,8 @@ import { logout } from "../features/users/usersSlice";
 // components
 import Menu from "./Menu";
 import Members from "./Members";
+// utils
+import { leftSideBarTogglerHandler } from "../utils/handlers";
 export default function LeftSideBar() {
   // states
   // slices state
@@ -18,15 +21,30 @@ export default function LeftSideBar() {
   // hooks
   const dispatch = useAppDispatch();
   return (
-    <div className="w-80 shrink-0 h-full">
-      <div className="px-5 py-1.5 h-full w-full">
-        <div className="h-full w-full bg-white shadow-2xl rounded-md overflow-hidden p-3 flex flex-col">
+    <div
+      className="absolute left-0 top-0 xl:relative overflow-hidden w-0 bg-black/50 xl:bg-transparent xl:w-80 shrink-0 h-full z-40 transition-all ease-in-out duration-150"
+      id="left-side-bar"
+      onClick={() => {
+        leftSideBarTogglerHandler();
+      }}
+    >
+      <div className="xl:px-5 px-1.5 py-1.5 h-full w-[18rem] xl:w-full">
+        <div
+          className="h-full w-full bg-white shadow-2xl rounded-md overflow-hidden p-3 flex flex-col"
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
           {/* header */}
-          <header className="flex items-center gap-x-1.5 pb-0.5">
+          <header className="flex items-center justify-between gap-x-1.5 pb-0.5">
             <div className="flex items-center gap-x-1.5 cursor-pointer text-green-500 transition-colors ease-in-out duration-150 hover:text-green-600 text-lg font-black">
               <GiBookmark />
               <h3>Library Management</h3>
             </div>
+            {/* collapse btn */}
+            <button className="border border-neutral-200 rounded-sm p-1 text-neutral-400 cursor-pointer transition-colors ease-in-out duration-150 hover:border-green-500 hover:text-green-500 xl:hidden" onClick={leftSideBarTogglerHandler}>
+              <LuArrowLeftToLine />
+            </button>
           </header>
           {menuId === "normal" ? (
             <div className="flex-1 flex flex-col gap-y-3.5">

@@ -6,13 +6,14 @@ import {
   getUsers,
   signup,
   login,
+  updateUserRole,
   logout,
   isAuthenticated,
 } from "../controllers/users.controllers";
 
 // middlewares
 // users
-import {privateRoutes} from '../middlewares/users.middleware'
+import { privateRoutes } from "../middlewares/users.middleware";
 
 // router
 const router = Router();
@@ -32,15 +33,24 @@ router.post("/login", (req: Request, res: Response) => {
   login(req, res);
 });
 
+// update user role
+router.put("/update/:_id",privateRoutes(), (req: Request, res: Response) => {
+  updateUserRole(req, res);
+});
+
 // logout
 router.get("/logout", (req: Request, res: Response) => {
   logout(req, res);
 });
 
 // is authenticated
-router.get("/is-authenticated",privateRoutes(), (req: Request, res: Response) => {
-  isAuthenticated(req, res);
-});
+router.get(
+  "/is-authenticated",
+  privateRoutes(),
+  (req: Request, res: Response) => {
+    isAuthenticated(req, res);
+  }
+);
 
 // exports
 export default router;

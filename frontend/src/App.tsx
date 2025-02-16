@@ -15,6 +15,7 @@ import {
   getUsers,
   setOnlineUsers,
   newUserSignupEvent,
+  userRoleUpdateEvent,
 } from "./features/users/usersSlice";
 // profiles
 import {
@@ -30,11 +31,20 @@ import {
   deleteBookEvent,
 } from "./features/books/booksSlice";
 // borrows
-import { getBorrows, getIBorrows } from "./features/borrows/borrowsSlice";
+import {
+  getBorrows,
+  getIBorrows,
+  getBorrowsDetail,
+  newBorrowEvent,
+  updateBorrowEvent,
+  deleteBorrowEvent,
+} from "./features/borrows/borrowsSlice";
 // pages
 import PrivateRoutes from "./pages/PrivateRoutes";
 import Authentication from "./pages/Authentication";
 import Home from "./pages/Home";
+import Actions from "./pages/Actions";
+import Member from "./pages/Member";
 export default function App() {
   // states
   // slices
@@ -55,6 +65,7 @@ export default function App() {
       dispatch(getBooks());
       dispatch(getBorrows());
       dispatch(getIBorrows());
+      dispatch(getBorrowsDetail());
 
       // socket
       // books
@@ -67,12 +78,25 @@ export default function App() {
       SOCKET.on("deleteBookEvent", (_id) => {
         dispatch(deleteBookEvent(_id));
       });
+      // borrows
+      SOCKET.on("newBorrowEvent", (newBorrow) => {
+        dispatch(newBorrowEvent(newBorrow));
+      });
+      SOCKET.on("updateBorrowEvent", (updateBorrow) => {
+        dispatch(updateBorrowEvent(updateBorrow));
+      });
+      SOCKET.on("deleteBorrowEvent", (deleteBorrow) => {
+        dispatch(deleteBorrowEvent(deleteBorrow));
+      });
       // users
       SOCKET.on("getOnlineUsersEvent", (data) => {
         dispatch(setOnlineUsers(data));
       });
       SOCKET.on("newUserSignupEvent", (user) => {
         dispatch(newUserSignupEvent(user));
+      });
+      SOCKET.on("userRoleUpdateEvent", (updatedUser) => {
+        dispatch(userRoleUpdateEvent(updatedUser));
       });
       // profiles
       SOCKET.on("newProfileEvent", (newProfile) => {
@@ -92,8 +116,8 @@ export default function App() {
           <Route path="/" element={<Home />}></Route>
           <Route path="/my-books" element={<Home />}></Route>
           <Route path="/my-favorites" element={<Home />}></Route>
-          <Route path="/i-borrowed" element={<Home />}></Route>
-          <Route path="/members" element={<Home />}></Route>
+          <Route path="/actions" element={<Actions />}></Route>
+          <Route path="/members" element={<Member />}></Route>
         </Route>
       </Routes>
     </div>

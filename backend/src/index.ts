@@ -33,7 +33,10 @@ app.use(urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: [
+      // "http://localhost:3000",
+      "https://mylibrary-xglj.onrender.com",
+    ],
     credentials: true,
   })
 );
@@ -46,7 +49,7 @@ app.use("/api/profiles", privateRoutes(), profilesRoutes);
 // books
 app.use("/api/books", privateRoutes(), booksRoutes);
 // borrow
-app.use("/api/borrows",privateRoutes(),  borrowRoutes);
+app.use("/api/borrows", privateRoutes(), borrowRoutes);
 
 // listening
 server.listen(PORT, async () => {

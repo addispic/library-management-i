@@ -71,7 +71,7 @@ export default function BorrowHandler({ bookItem }: { bookItem: IBook }) {
         </button>
       )}
       {isBorrowOn && (
-        <div className="fixed left-0 top-0 w-screen h-screen flex items-center justify-center bg-black/30 z-30">
+        <div className="fixed left-0 top-0 w-screen h-screen flex items-center justify-center bg-black/30 z-50">
           <div className="w-80 bg-white rounded-md p-5">
             {/* header */}
             <header className="relative">

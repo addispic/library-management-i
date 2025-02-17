@@ -7,7 +7,7 @@ import { LuArrowLeftToLine } from "react-icons/lu";
 import { useAppSelector, useAppDispatch } from "../hooks";
 // slices
 import { menuIdSelector } from "../features/menu/menuSlice";
-import { logout } from "../features/users/usersSlice";
+import { logout, setFormId } from "../features/users/usersSlice";
 // components
 import Menu from "./Menu";
 import Members from "./Members";
@@ -65,6 +65,7 @@ export default function LeftSideBar() {
               className="flex items-center gap-x-3 text-neutral-500 cursor-pointer relative after:absolute after:left-0 after:top-0 after:h-full after:w-[32px] after:rounded-md after:bg-neutral-100 p-1.5 rounded-md overflow-hidden after:transition-all after:ease-in-out after:duration-200 hover:after:w-full"
               onClick={() => {
                 dispatch(logout());
+                dispatch(setFormId("login"))
               }}
             >
               {/* icon */}

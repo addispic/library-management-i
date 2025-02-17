@@ -265,7 +265,7 @@ export default function Home() {
       {/* delete conformation */}
       {isBookDeleteOn && (
         <div
-          className={`fixed  left-0 top-0 w-screen h-screen overflow-hidden flex items-center justify-center bg-black/50 z-30 `}
+          className={`fixed  left-0 top-0 w-screen h-screen overflow-hidden flex items-center justify-center bg-black/50 z-50 `}
         >
           <div className={`w-96 shrink-0 bg-white rounded-md p-5 relative`}>
             {/* close btn */}

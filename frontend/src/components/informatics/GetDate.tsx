@@ -1,7 +1,7 @@
 
-
+import {formatDistanceToNow} from 'date-fns'
 export default function GetDate({date}: {date: string}){
     return (
-        <>21 hours ago</>
+        <>{formatDistanceToNow(new Date(date),{addSuffix: true})}</>
     )
 }

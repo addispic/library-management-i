@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from "./hooks";
 import {
   checkingAuthenticationSelector,
   isUserAuthenticated,
+  isUsersFetchingSelector,
   userSelector,
   getUsers,
   setOnlineUsers,
@@ -22,6 +23,7 @@ import {
   getProfiles,
   newProfileEvent,
   profileUpdateEvent,
+  isProfilesFetchingSelector,
 } from "./features/profiles/profilesSlice";
 // books
 import {
@@ -29,6 +31,7 @@ import {
   newBookEvent,
   updateBookEvent,
   deleteBookEvent,
+  isBooksFetchingSelector,
 } from "./features/books/booksSlice";
 // borrows
 import {
@@ -38,6 +41,8 @@ import {
   newBorrowEvent,
   updateBorrowEvent,
   deleteBorrowEvent,
+  isBorrowsFetchingSelector,
+  isIBorrowsFetchingSelector,
 } from "./features/borrows/borrowsSlice";
 // pages
 import PrivateRoutes from "./pages/PrivateRoutes";
@@ -51,6 +56,11 @@ export default function App() {
   // users
   const checkingAuthentication = useAppSelector(checkingAuthenticationSelector);
   const user = useAppSelector(userSelector);
+  const isUsersFetching = useAppSelector(isUsersFetchingSelector)
+  const isProfilesFetching = useAppSelector(isProfilesFetchingSelector);
+  const isBooksFetching = useAppSelector(isBooksFetchingSelector);
+  const isBorrowsFetching = useAppSelector(isBorrowsFetchingSelector);
+  const isIBorrowsFetching = useAppSelector(isIBorrowsFetchingSelector);
   // hooks
   const dispatch = useAppDispatch();
 
@@ -107,7 +117,69 @@ export default function App() {
       });
     }
   }, [user]);
-  if (checkingAuthentication) return <div>Authenticating...</div>;
+  if (
+    checkingAuthentication ||
+    isProfilesFetching ||
+    isBooksFetching ||
+    isBorrowsFetching ||
+    isIBorrowsFetching || isUsersFetching
+  )
+    return (
+      <div className="w-screen h-screen flex items-center justify-center bg-white">
+        <div>
+          <div className="circles">
+            <div
+              className="circle"
+              style={
+                {
+                  "--color": "#10e310",
+                  "--delay": "-1.2s",
+                } as React.CSSProperties
+              }
+            />
+            <div
+              className="circle"
+              style={
+                {
+                  "--color": "#f4f716",
+                  "--delay": "-1s",
+                } as React.CSSProperties
+              }
+            />
+            <div
+              className="circle"
+              style={
+                {
+                  "--color": "#f71616",
+                  "--delay": "-0.8s",
+                } as React.CSSProperties
+              }
+            />
+            <div
+              className="circle"
+              style={
+                {
+                  "--color": "#1631f7",
+                  "--delay": "-0.6s",
+                } as React.CSSProperties
+              }
+            />
+            <div
+              className="circle"
+              style={
+                {
+                  "--color": "#f716f0",
+                  "--delay": "-0.4s",
+                } as React.CSSProperties
+              }
+            />
+          </div>
+          <h3 className="mt-3 flex items-center justify-center font-black text-sm text-neutral-400">
+            Loading...
+          </h3>
+        </div>
+      </div>
+    );
   return (
     <div className="w-screen h-screen overflow-hidden bg-neutral-100">
       <Routes>

@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 // icons
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { BsEmojiSmileUpsideDown } from "react-icons/bs";
+import { CiWarning } from "react-icons/ci";
+import { IoMdClose } from "react-icons/io";
 // hooks
 import { useAppSelector, useAppDispatch } from "../hooks";
 // slices
@@ -49,6 +51,8 @@ export default function AddNewBook() {
     isOn: false,
   });
   const [description, setDescription] = useState("");
+  // error
+  const [error, setError] = useState("");
 
   // hooks
   const dispatch = useAppDispatch();
@@ -142,18 +146,19 @@ export default function AddNewBook() {
       formData.append("book", file);
       formData.append("description", description);
       formData.append("category", category.selected);
+      setError("");
       if (isBookEditOn) {
         formData.append("_id", isBookEditOn._id);
         dispatch(updateBook(formData));
       } else {
         if (!file) {
-          console.log("All Fields Are Required");
+          setError("All form fields are required");
         } else {
           dispatch(addNewBook(formData));
         }
       }
     } else {
-      console.log("Fill All Fields Are Required");
+      setError("All from fields are required");
     }
   };
   return (
@@ -163,6 +168,22 @@ export default function AddNewBook() {
           <div className="flex flex-col items-center justify-center gap-1.5">
             <BsEmojiSmileUpsideDown className="text-5xl text-neutral-400" />
             <h3>Not allowed!!!</h3>
+          </div>
+        </div>
+      )}
+      {error && (
+        <div className="absolute left-1/2 -translate-x-1/2 top-3">
+          <div className={`flex flex-col items-center justify-center bg-white p-3 rounded-sm shadow-2xl z-[100] relative transition-transform ease-in-out duration-150 ${error ? "scale-100" : "scale-0"}`}>
+            <button
+              className="absolute top-1.5 right-1.5 text-neutral-400 hover:text-red-500 cursor-pointer text-xl"
+              onClick={() => {
+                setError("");
+              }}
+            >
+              <IoMdClose />
+            </button>
+            <CiWarning className="text-xl text-red-500" />
+            <p className="text-center text-sm text-red-500">{error}</p>
           </div>
         </div>
       )}
@@ -346,7 +367,7 @@ export default function AddNewBook() {
               }}
             />
             {!date && (
-              <div className="absolute left-0 top-0 h-full w-[75%] bg-white text-sm text-neutral-400 flex items-center px-1.5">
+              <div className="absolute left-0 z-10 top-0 h-full w-[75%] bg-white text-sm text-neutral-400 flex items-center px-1.5">
                 <span>Publish date</span>
               </div>
             )}

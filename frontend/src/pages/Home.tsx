@@ -8,6 +8,8 @@ import { FaRegMessage } from "react-icons/fa6";
 import { BsTrash3 } from "react-icons/bs";
 import { AiOutlineClose } from "react-icons/ai";
 import { AiOutlineEdit } from "react-icons/ai";
+import { BsEmojiFrown } from "react-icons/bs";
+import { FaRegHandPointRight } from "react-icons/fa";
 // hooks
 import { useAppDispatch, useAppSelector } from "../hooks";
 // slices
@@ -29,6 +31,9 @@ import GetProfile from "../components/informatics/GetProfile";
 import GetDate from "../components/informatics/GetDate";
 import IsUserOnline from "../components/informatics/IsUserOnline";
 import GetBorrowNumber from "../components/informatics/GetBorrowNumber";
+
+// utils
+import { rightSideBarToggler } from "../utils/handlers";
 
 export default function Home() {
   // states
@@ -54,64 +59,64 @@ export default function Home() {
   }, [isBookDeletingDone]);
   return (
     <div className="flex-1 flex flex-col px-3 xl:px-0">
-      {/* header */}
-      <header className="flex items-center justify-between mb-3.5">
-        {/* left */}
-        <div className="hidden sm:inline-block w-[40%]">
-          {/* search */}
-          <div className="flex items-center gap-x-0.5 border border-neutral-200 rounded-sm p-1.5 bg-white">
-            <FiSearch className="text-xl text-neutral-500" />
-            <input
-              className="w-full focus:ring-0 focus:outline-none border-none text-sm"
-              type="text"
-              placeholder="Search books"
-            />
-          </div>
-        </div>
-        {/* right */}
-        <div className="flex items-center gap-x-3">
-          <button
-            onClick={() => {
-              setFilter("");
-            }}
-            className={`px-1.5 py-1 rounded-sm bg-white shadow-sm text-sm cursor-pointer border transition-colors ease-in-out duration-300 ${
-              !filter
-                ? "border-green-500 text-green-500"
-                : "border-white text-neutral-500"
-            }`}
-          >
-            All Books
-          </button>
-          <button
-            onClick={() => {
-              setFilter("Educational");
-            }}
-            className={`px-1.5 py-1 rounded-sm bg-white shadow-sm text-sm  cursor-pointer border transition-colors ease-in-out duration-300 ${
-              filter === "Educational"
-                ? "border-green-500 text-green-500"
-                : "border-white text-neutral-500"
-            }`}
-          >
-            Educational
-          </button>
-          <button
-            onClick={() => {
-              setFilter("Fiction");
-            }}
-            className={`px-1.5 py-1 rounded-sm bg-white shadow-sm text-sm  cursor-pointer border transition-colors ease-in-out duration-300 ${
-              filter === "Fiction"
-                ? "border-green-500 text-green-500"
-                : "border-white text-neutral-500"
-            }`}
-          >
-            Fictions
-          </button>
-        </div>
-      </header>
-      {/* books list */}
-      <div className="flex-1 pr-1.5 max-h-[82vh] overflow-y-auto">
-        {books.length > 0 ? (
-          <>
+      {books.length > 0 ? (
+        <>
+          {/* header */}
+          <header className="flex items-center justify-between mb-3.5">
+            {/* left */}
+            <div className="hidden sm:inline-block w-[40%]">
+              {/* search */}
+              <div className="flex items-center gap-x-0.5 border border-neutral-200 rounded-sm p-1.5 bg-white">
+                <FiSearch className="text-xl text-neutral-500" />
+                <input
+                  className="w-full focus:ring-0 focus:outline-none border-none text-sm"
+                  type="text"
+                  placeholder="Search books"
+                />
+              </div>
+            </div>
+            {/* right */}
+            <div className="flex items-center gap-x-3">
+              <button
+                onClick={() => {
+                  setFilter("");
+                }}
+                className={`px-1.5 py-1 rounded-sm bg-white shadow-sm text-sm cursor-pointer border transition-colors ease-in-out duration-300 ${
+                  !filter
+                    ? "border-green-500 text-green-500"
+                    : "border-white text-neutral-500"
+                }`}
+              >
+                All Books
+              </button>
+              <button
+                onClick={() => {
+                  setFilter("Educational");
+                }}
+                className={`px-1.5 py-1 rounded-sm bg-white shadow-sm text-sm  cursor-pointer border transition-colors ease-in-out duration-300 ${
+                  filter === "Educational"
+                    ? "border-green-500 text-green-500"
+                    : "border-white text-neutral-500"
+                }`}
+              >
+                Educational
+              </button>
+              <button
+                onClick={() => {
+                  setFilter("Fiction");
+                }}
+                className={`px-1.5 py-1 rounded-sm bg-white shadow-sm text-sm  cursor-pointer border transition-colors ease-in-out duration-300 ${
+                  filter === "Fiction"
+                    ? "border-green-500 text-green-500"
+                    : "border-white text-neutral-500"
+                }`}
+              >
+                Fictions
+              </button>
+            </div>
+          </header>
+          {/* books list */}
+          <div className="flex-1 pr-1.5 max-h-[82vh] overflow-y-auto">
             {books.map((bookItem) => {
               if (filter && filter !== bookItem.category) return null;
               return (
@@ -225,11 +230,38 @@ export default function Home() {
                 </div>
               );
             })}
-          </>
-        ) : (
-          <div>No Books</div>
-        )}
-      </div>
+          </div>
+        </>
+      ) : (
+        <div className="p-3">
+          <div className="bg-white rounded-tl-3xl rounded-br-3xl p-3">
+            <div className="flex items-center justify-center text-3xl my-1.5 text-neutral-400">
+              <BsEmojiFrown />
+            </div>
+            <div>
+              <p className="italic text-neutral-500">
+                There are no books to display at the moment, but as soon as
+                books are added, they will appear here. You can view and manage
+                them based on your role.
+              </p>
+            </div>
+            {user?.role !== "normal" && (
+              <div className="flex items-center justify-center my-3">
+                <button
+                  className="flex flex-col items-center justify-center w-14 aspect-square rounded-full border border-neutral-300 text-neutral-500 transition-colors cursor-pointer ease-in-out duration-150 hover:border-green-500 hover:bg-green-500 hover:text-white"
+                  onClick={() => {
+                    rightSideBarToggler();
+                  }}
+                >
+                  <FaRegHandPointRight className="text-xl" />
+                  <span className="text-sm ">add</span>
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* delete conformation */}
       {isBookDeleteOn && (
         <div

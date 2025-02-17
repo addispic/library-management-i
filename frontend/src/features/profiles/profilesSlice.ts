@@ -136,10 +136,13 @@ const profilesSlice = createSlice({
 
 // exports
 // actions
-export const {newProfileEvent,profileUpdateEvent} = profilesSlice.actions
+export const { newProfileEvent, profileUpdateEvent } = profilesSlice.actions;
 // selectors
 // profiles
 export const profilesSelector = (state: RootState) => state.profiles.profiles;
+// is profiles fetching
+export const isProfilesFetchingSelector = (state: RootState) =>
+  state.profiles.isProfilesFetching;
 // is profile uploading
 export const isProfileUploadingSelector = (state: RootState) =>
   state.profiles.isProfileUploading;

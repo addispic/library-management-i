@@ -25,8 +25,6 @@ const io = new Server(server, {
 
 // connection
 io.on("connection", (socket) => {
-  console.log(socket.id);
-
   // book
   // new book
   socket.on("newBook", (newBook) => {

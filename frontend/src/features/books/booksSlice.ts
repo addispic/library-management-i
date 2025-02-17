@@ -219,6 +219,8 @@ export const {
 // selectors
 // books
 export const booksSelector = (state: RootState) => state.books.books;
+// is book is fetching
+export const isBooksFetchingSelector = (state: RootState) => state.books.isBooksFetching
 // is book uploading
 export const isBookUploadingSelector = (state: RootState) =>
   state.books.isBookUploading;

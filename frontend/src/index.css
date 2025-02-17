@@ -12,3 +12,32 @@
     background: rgb(207, 207, 207);
     border-radius: 3px;
 }
+
+/* loaders */
+.circles {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.circles .circle {
+    width: 16px;
+    aspect-ratio: 1;
+    border-radius: 100vw;
+    background: var(--color);
+    box-shadow: 0 0 50px var(--color);
+    animation: grow 1.6s ease-in-out infinite;
+    animation-delay: var(--delay);
+}
+
+@keyframes grow {
+    0%,
+    40%,
+    100% {
+        transform: scale(0.2);
+    }
+    20%{
+        transform: scale(1);
+    }
+}

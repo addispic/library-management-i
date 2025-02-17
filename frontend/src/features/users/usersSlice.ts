@@ -328,6 +328,8 @@ export const errorsSelector = (state: RootState) => state.users.errors;
 // is authenticating selector
 export const isAuthenticatingSelector = (state: RootState) =>
   state.users.isAuthenticating;
+// is users fetching
+export const isUsersFetchingSelector = (state: RootState) => state.users.isUsersFetching
 // is member selected
 export const isMemberSelectedSelector = (state: RootState) =>
   state.users.isMemberSelected;

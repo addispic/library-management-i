@@ -36,7 +36,7 @@ type IBorrowDetail = {
 };
 type IInitialState = {
   isBorrowsFetching: boolean;
-  isIBorrowFetching: boolean;
+  isIBorrowsFetching: boolean;
   isNewBorrowUploading: boolean;
   isNewBorrowUploadingDone: boolean;
   borrows: IBorrows[];
@@ -50,7 +50,7 @@ type IInitialState = {
 // initial state
 const initialState: IInitialState = {
   isBorrowsFetching: false,
-  isIBorrowFetching: false,
+  isIBorrowsFetching: false,
   borrows: [],
   iBorrows: [],
   isNewBorrowUploading: false,
@@ -266,16 +266,16 @@ const borrowsSlice = createSlice({
       })
       // get i borrow
       .addCase(getIBorrows.pending, (state) => {
-        state.isIBorrowFetching = true;
+        state.isIBorrowsFetching = true;
       })
       .addCase(getIBorrows.fulfilled, (state, action) => {
-        state.isIBorrowFetching = false;
+        state.isIBorrowsFetching = false;
         if (action.payload.iBorrows) {
           state.iBorrows = action.payload.iBorrows;
         }
       })
       .addCase(getIBorrows.rejected, (state) => {
-        state.isIBorrowFetching = false;
+        state.isIBorrowsFetching = false;
       })
       // add new borrow
       .addCase(addNewBorrow.pending, (state) => {
@@ -393,6 +393,10 @@ export const {
 // selectors
 // borrows
 export const borrowsSelector = (state: RootState) => state.borrows.borrows;
+// is borrows fetching
+export const isBorrowsFetchingSelector = (state: RootState) => state.borrows.isBorrowsFetching
+// is i borrows fetching
+export const isIBorrowsFetchingSelector = (state: RootState) => state.borrows.isIBorrowsFetching
 // borrows detail
 export const borrowsDetailSelector = (state: RootState) =>
   state.borrows.borrowsDetail;

@@ -1,3 +1,5 @@
+// icons
+import { FaRegHandPointLeft } from "react-icons/fa";
 // hooks
 import { useAppSelector, useAppDispatch } from "../hooks";
 // slices
@@ -10,6 +12,9 @@ import {
 // components
 import GetUsername from "../components/informatics/GetUsername";
 import GetProfile from "../components/informatics/GetProfile";
+
+// utils
+import {leftSideBarTogglerHandler} from '../utils/handlers'
 
 export default function Member() {
   // states
@@ -83,7 +88,14 @@ export default function Member() {
           </div>
         </div>
       ) : (
-        <div>Addis Menelik Is Just Failed</div>
+        <div className="w-full flex items-center justify-center">
+          <div className="flex flex-col items-center justify-center gap-y-1.5">
+            <h3 className="font-semibold text-neutral-400">Select Member</h3>
+            <button className="border border-neutral-300 text-neutral-400 transition-colors ease-in-out duration-200 hover:border-neutral-500 hover:text-neutral-500 cursor-pointer rounded-full flex items-center justify-center w-12 aspect-square" onClick={leftSideBarTogglerHandler}>
+              <FaRegHandPointLeft className="text-3xl"/>
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );
